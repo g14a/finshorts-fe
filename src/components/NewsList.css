@@ -8,7 +8,6 @@
 .news-item {
   display: flex;
   align-items: center;
-  margin: 0.5rem 0;
   padding: 0.5rem 0;
   border-bottom: 1px solid #ccc;
   width: 100%;
@@ -52,4 +51,27 @@
   font-size: 0.875rem;
   color: #999;
   flex-shrink: 0;
+}
+
+.pagination {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.page-number {
+  cursor: pointer;
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.page-number.active {
+  background-color: #05846a;
+  color: white;
+  border-color: #05846a;
+}
+
+.page-number:hover {
+  background-color: #d3d3d3;
 }

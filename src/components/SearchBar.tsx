@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import './SearchBar.css';
-import axios from 'axios';
-import { Article } from './NewsList';
+import { fetchArticles, Article } from './NewsList';
 
 interface SearchBarProps {
-    onSearchResults: (articles: Article[]) => void;
     onSearchError: (message: string) => void;
+    onLoadingChange: (isLoading: boolean) => void;
+    setTotalPages: React.Dispatch<React.SetStateAction<number>>;
+    setArticles: React.Dispatch<React.SetStateAction<Article[]>>;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearchResults, onSearchError }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onSearchError, onLoadingChange, setTotalPages, setArticles }) => {
     const [query, setQuery] = useState<string>('');
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,14 +20,20 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearchResults, onSearchError })
         if (!query) return;
 
         try {
-            const response = await axios.post<Article[]>(`http://localhost:8080/articles?keyword=${encodeURIComponent(query)}`);
-            if (response.data.length === 0) {
-                onSearchError('No results found');
-                onSearchResults([]);
-            } else {
-                onSearchResults(response.data);
-                onSearchError('');
-            }
+            await fetchArticles(
+                1, 
+                query,
+                setArticles,
+                setTotalPages,
+                onLoadingChange,
+                (error: string | null) => {
+                    if (error) {
+                        onSearchError('An error occurred during the search');
+                    } else {
+                        onSearchError('');
+                    }
+                },
+            );
         } catch (error) {
             console.error('Search error:', error);
             onSearchError('An error occurred during the search');

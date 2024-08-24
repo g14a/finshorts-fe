@@ -1,20 +1,33 @@
 import React, { useState } from 'react';
 import './App.css';
-import NewsList, { fetchArticles, Article } from './components/NewsList';
+import NewsList, { Article, fetchArticles } from './components/NewsList';
 import SearchBar from './components/SearchBar';
 
 function App() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [totalPages, setTotalPages] = useState<number>(0);  // New state for total pages
 
-  const handleSearchResults = (results: Article[]) => {
+  const handleSearchResults = (results: Article[], totalPages: number) => {
     setArticles(results);
+    setTotalPages(totalPages);
+    setLoading(false);
+  };
+
+  const handleSearchError = (message: string) => {
+    setError(message);
     setLoading(false);
   };
 
   const handleHomeClick = () => {
-    fetchArticles(setArticles, setLoading, setError);
+    // Reset state to load the initial articles
+    setArticles([]);
+    setError(null);
+    setLoading(true);
+
+    // Fetch the first page of articles as the default when returning home
+    fetchArticles(1, "", setArticles, setTotalPages, setLoading, setError);
   };
 
   return (
@@ -26,7 +39,12 @@ function App() {
         <a href="#" className="home-link" onClick={handleHomeClick}>
           Home
         </a>
-        <SearchBar onSearchResults={handleSearchResults} onSearchError={setError} />
+        <SearchBar
+          onSearchError={handleSearchError}
+          onLoadingChange={setLoading}
+          setTotalPages={setTotalPages}
+          setArticles={setArticles}
+        />
       </div>
       {error && <div>Error: {error}</div>}
       {articles.length === 0 && !error && !loading && <div>No articles to display.</div>}
