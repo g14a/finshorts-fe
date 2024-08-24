@@ -1,0 +1,55 @@
+.news-list {
+  width: 100%;
+  padding: 1rem;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.news-item {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ccc;
+  width: 100%;
+}
+
+.news-number {
+  margin-right: 0.5rem;
+  width: 2rem;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.upvote-button {
+  background: none;
+  border: none;
+  color: #9da5a3;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+  transition: color 0.3s ease;
+}
+
+.upvote-button:hover {
+  color: #05846a;
+}
+
+.news-link {
+  font-size: 1rem;
+  color: #333;
+  text-decoration: none;
+  margin-right: 0.5rem;
+  flex-grow: 1;
+}
+
+.news-link:hover {
+  text-decoration: underline;
+}
+
+.news-source {
+  font-size: 0.875rem;
+  color: #999;
+  flex-shrink: 0;
+}
