@@ -37,6 +37,11 @@ export const fetchArticles = async (
 };
 
 const NewsList: React.FC<NewsListProps> = ({ onLoadingChange, onErrorChange, articles, setArticles }) => {
+  const getDomainName = (url: string) => {
+    const hostname = new URL(url).hostname;
+    return hostname.startsWith('www.') ? hostname.slice(4) : hostname;
+  };
+
   useEffect(() => {
     fetchArticles(setArticles, onLoadingChange, onErrorChange);
   }, [setArticles, onLoadingChange, onErrorChange]);
@@ -50,7 +55,7 @@ const NewsList: React.FC<NewsListProps> = ({ onLoadingChange, onErrorChange, art
           <a href={article.link} target="_blank" rel="noopener noreferrer" className="news-link">
             {article.headline}
           </a>
-          <span className="news-source">({new URL(article.website).hostname})</span>
+          <span className="news-source">({getDomainName(article.website)})</span>
         </div>
       ))}
     </div>
