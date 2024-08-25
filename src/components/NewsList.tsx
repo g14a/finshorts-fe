@@ -22,6 +22,9 @@ interface NewsListProps {
   onErrorChange: (error: string | null) => void;
   articles: Article[];
   setArticles: React.Dispatch<React.SetStateAction<Article[]>>;
+  query: string;
+  currentPage: number;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const fetchArticles = async (
@@ -51,8 +54,7 @@ export const fetchArticles = async (
   }
 };
 
-const NewsList: React.FC<NewsListProps> = ({ onLoadingChange, onErrorChange, articles, setArticles }) => {
-  const [currentPage, setCurrentPage] = useState<number>(1);
+const NewsList: React.FC<NewsListProps> = ({ onLoadingChange, onErrorChange, articles, setArticles, query, currentPage, setCurrentPage }) => {
   const [totalPages, setTotalPages] = useState<number>(0);
 
   const getDomainName = (url: string) => {
@@ -61,8 +63,8 @@ const NewsList: React.FC<NewsListProps> = ({ onLoadingChange, onErrorChange, art
   };
 
   useEffect(() => {
-    fetchArticles(currentPage, "", setArticles, setTotalPages, onLoadingChange, onErrorChange);
-  }, [currentPage, setArticles, onLoadingChange, onErrorChange]);
+    fetchArticles(currentPage, query, setArticles, setTotalPages, onLoadingChange, onErrorChange);
+  }, [currentPage, query, setArticles, onLoadingChange, onErrorChange]);
 
   const handlePageClick = (page: number) => {
     setCurrentPage(page);

@@ -3,26 +3,29 @@ import './SearchBar.css';
 import { fetchArticles, Article } from './NewsList';
 
 interface SearchBarProps {
+    onSearchResults: (articles: Article[], totalPages: number) => void;
     onSearchError: (message: string) => void;
     onLoadingChange: (isLoading: boolean) => void;
     setTotalPages: React.Dispatch<React.SetStateAction<number>>;
     setArticles: React.Dispatch<React.SetStateAction<Article[]>>;
+    setQuery: React.Dispatch<React.SetStateAction<string>>; // Add setQuery prop to update the query in App.tsx
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearchError, onLoadingChange, setTotalPages, setArticles }) => {
-    const [query, setQuery] = useState<string>('');
+const SearchBar: React.FC<SearchBarProps> = ({ onSearchResults, onSearchError, onLoadingChange, setTotalPages, setArticles, setQuery }) => {
+    const [localQuery, setLocalQuery] = useState<string>(''); // Manage local query state
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setQuery(event.target.value);
+        setLocalQuery(event.target.value); // Update the local query state
     };
 
     const handleSearch = async () => {
-        if (!query) return;
+        if (!localQuery) return;
 
         try {
+            setQuery(localQuery); // Update the query in App.tsx
             await fetchArticles(
                 1, 
-                query,
+                localQuery,
                 setArticles,
                 setTotalPages,
                 onLoadingChange,
@@ -50,7 +53,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearchError, onLoadingChange, s
         <div className="search-bar">
             <input
                 type="text"
-                value={query}
+                value={localQuery}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 placeholder="Search for articles..."
