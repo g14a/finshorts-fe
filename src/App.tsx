@@ -11,6 +11,7 @@ function App() {
   const [query, setQuery] = useState<string>(''); 
   const [totalPages, setTotalPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1); // New state for current page
+  const [selectedDomain, setSelectedDomain] = useState<string>(''); // New state for selected domain
 
   const handleSearchResults = (results: Article[], totalPages: number) => {
     setArticles(results);
@@ -26,13 +27,18 @@ function App() {
     setQuery('')
     setTotalPages(0)
     setCurrentPage(1)
+    setSelectedDomain(''); 
     // Fetch the first page of articles as the default when returning home
-    fetchArticles(1, "", setArticles, setTotalPages, setLoading, setError);
+    fetchArticles(1, "", null, setArticles, setTotalPages, setLoading, setError);
   };
 
   const handleSearchError = (message: string) => {
     setError(message);
     setLoading(false);
+  };
+
+  const handleDomainChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedDomain(event.target.value);
   };
 
   return (
@@ -52,6 +58,15 @@ function App() {
           setArticles={setArticles}
           setQuery={setQuery}
         />
+        <select value={selectedDomain} onChange={handleDomainChange} className="domain-filter">
+          <option value="">All</option>
+          <option value="livemint">Livemint</option>
+          <option value="investopedia">Investopedia</option>
+          <option value="economictimes">Economic Times</option>
+          <option value="timesofindia">Times of India</option>
+          <option value="outlookbusiness">Outlook Business</option>
+          <option value="financialexpress">Financial Express</option>
+        </select>
       </div>
       {error && <div>Error: {error}</div>}
       {articles.length === 0 && !error && !loading && <div>No articles to display.</div>}
@@ -62,7 +77,8 @@ function App() {
         setArticles={setArticles}
         query={query} 
         currentPage={currentPage} 
-        setCurrentPage={setCurrentPage} 
+        setCurrentPage={setCurrentPage}
+        websiteFilter={selectedDomain} 
       />
     </div>
   );

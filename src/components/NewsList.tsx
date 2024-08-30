@@ -23,6 +23,7 @@ interface NewsListProps {
   articles: Article[];
   setArticles: React.Dispatch<React.SetStateAction<Article[]>>;
   query: string;
+  websiteFilter: string | null;
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -30,6 +31,7 @@ interface NewsListProps {
 export const fetchArticles = async (
   page: number,
   query: string,
+  websiteFilter: string | null,
   setArticles: React.Dispatch<React.SetStateAction<Article[]>>,
   setTotalPages: React.Dispatch<React.SetStateAction<number>>,
   onLoadingChange: (isLoading: boolean) => void,
@@ -38,7 +40,7 @@ export const fetchArticles = async (
   onLoadingChange(true);
   try {
     const response = await axios.get<PaginatedResponse>(
-      `http://localhost:8080/articles?page=${page}&pageSize=20&keyword=${query}`
+      `http://localhost:8080/articles?page=${page}&pageSize=20&keyword=${query}&website=${websiteFilter}`
     );
     setArticles(response.data.articles);
     setTotalPages(response.data.totalPages);
@@ -54,7 +56,7 @@ export const fetchArticles = async (
   }
 };
 
-const NewsList: React.FC<NewsListProps> = ({ onLoadingChange, onErrorChange, articles, setArticles, query, currentPage, setCurrentPage }) => {
+const NewsList: React.FC<NewsListProps> = ({ onLoadingChange, onErrorChange, articles, setArticles, query, websiteFilter, currentPage, setCurrentPage }) => {
   const [totalPages, setTotalPages] = useState<number>(0);
 
   const getDomainName = (url: string) => {
@@ -63,8 +65,8 @@ const NewsList: React.FC<NewsListProps> = ({ onLoadingChange, onErrorChange, art
   };
 
   useEffect(() => {
-    fetchArticles(currentPage, query, setArticles, setTotalPages, onLoadingChange, onErrorChange);
-  }, [currentPage, query, setArticles, onLoadingChange, onErrorChange]);
+    fetchArticles(currentPage, query, websiteFilter, setArticles, setTotalPages, onLoadingChange, onErrorChange);
+  }, [currentPage, query, websiteFilter, setArticles, onLoadingChange, onErrorChange]);
 
   const handlePageClick = (page: number) => {
     setCurrentPage(page);

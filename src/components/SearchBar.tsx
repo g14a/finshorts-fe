@@ -26,6 +26,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearchResults, onSearchError, o
             await fetchArticles(
                 1, 
                 localQuery,
+                null,
                 setArticles,
                 setTotalPages,
                 onLoadingChange,

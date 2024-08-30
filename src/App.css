@@ -1,29 +1,29 @@
 .App {
-  width: calc(100% - 40rem); 
-  max-width: calc(100% - 40rem); 
-  margin: 0 auto; 
-  padding: 0; 
+  width: calc(100% - 30rem);
+  max-width: calc(100% - 30rem);
+  margin: 0 auto;
+  padding: 0;
   font-family: 'Arial', sans-serif;
 }
 
 .App-header {
   background-color: #05846a;
-  padding: 1rem; 
+  padding: 1rem;
   color: white;
   text-align: left;
-  width: 100%; 
+  width: 100%;
 }
 
 .top-bar {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Align content to the start of the container */
+  justify-content: flex-start;
   padding-left: 2rem;
 }
 
 h1 {
   margin: 0;
-  font-size: 1.5rem; 
+  font-size: 1.5rem;
 }
 
 .home-link {
@@ -40,7 +40,7 @@ h1 {
 .search-bar {
   display: flex;
   align-items: center;
-  flex-grow: 2; 
+  flex-grow: 2;
 }
 
 .search-bar input {
@@ -62,4 +62,35 @@ h1 {
 
 .search-bar button:hover {
   background-color: #218838;
+}
+
+.top-bar .domain-filter {
+  margin-left: 1rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #ffffff; /* White background */
+  color: #333; /* Dark text color for contrast */
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for a raised effect */
+  transition: all 0.3s ease; /* Smooth transition */
+}
+
+.top-bar .domain-filter:hover {
+  border-color: #05846a; /* Light blue border on hover */
+}
+
+.top-bar .domain-filter:focus {
+  outline: none;
+  border-color: #05846a; /* Light blue border on focus */
+}
+
+.top-bar .domain-filter option {
+  background-color: #ffffff; /* White background for options */
+  color: #333; /* Dark text color for contrast */
+}
+
+.top-bar .domain-filter option:hover {
+  background-color: #f1f1f1; /* Light grey background on hover */
 }
