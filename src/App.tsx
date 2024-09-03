@@ -59,7 +59,7 @@ function App() {
           setQuery={setQuery}
         />
         <select value={selectedDomain} onChange={handleDomainChange} className="domain-filter">
-          <option value="">All</option>
+          <option value="">Select by domain</option>
           <option value="livemint">Livemint</option>
           <option value="investopedia">Investopedia</option>
           <option value="economictimes">Economic Times</option>

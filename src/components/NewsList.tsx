@@ -39,9 +39,17 @@ export const fetchArticles = async (
 ) => {
   onLoadingChange(true);
   try {
-    const response = await axios.get<PaginatedResponse>(
-      `http://localhost:8080/articles?page=${page}&pageSize=20&keyword=${query}&website=${websiteFilter}`
-    );
+    let url = `http://localhost:8080/articles?page=${page}&pageSize=20`
+
+    if (query) {
+      url = `${url}&keyword=${query}`
+    }
+
+    if (websiteFilter) {
+      url = `${url}&website=${websiteFilter}`
+    }
+
+    const response = await axios.get<PaginatedResponse>(url);
     setArticles(response.data.articles);
     setTotalPages(response.data.totalPages);
     onErrorChange(null);
