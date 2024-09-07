@@ -39,14 +39,14 @@ export const fetchArticles = async (
 ) => {
   onLoadingChange(true);
   try {
-    let url = `http://localhost:8080/articles?page=${page}&pageSize=20`
+    let url = `http://localhost:8080/articles?page=${page}&pageSize=20`;
 
     if (query) {
-      url = `${url}&keyword=${query}`
+      url = `${url}&keyword=${query}`;
     }
 
     if (websiteFilter) {
-      url = `${url}&website=${websiteFilter}`
+      url = `${url}&website=${websiteFilter}`;
     }
 
     const response = await axios.get<PaginatedResponse>(url);
@@ -66,6 +66,7 @@ export const fetchArticles = async (
 
 const NewsList: React.FC<NewsListProps> = ({ onLoadingChange, onErrorChange, articles, setArticles, query, websiteFilter, currentPage, setCurrentPage }) => {
   const [totalPages, setTotalPages] = useState<number>(0);
+  const [pageGroup, setPageGroup] = useState<number>(0); // To track the group of pages (set of 10)
 
   const getDomainName = (url: string) => {
     const hostname = new URL(url).hostname;
@@ -80,12 +81,22 @@ const NewsList: React.FC<NewsListProps> = ({ onLoadingChange, onErrorChange, art
     setCurrentPage(page);
   };
 
+  const handlePrevGroup = () => {
+    if (pageGroup > 0) setPageGroup(pageGroup - 1);
+  };
+
+  const handleNextGroup = () => {
+    if ((pageGroup + 1) * 10 < totalPages) setPageGroup(pageGroup + 1);
+  };
+
+  const startPage = pageGroup * 10 + 1;
+  const endPage = Math.min((pageGroup + 1) * 10, totalPages);
+
   return (
     <div className="news-list">
       {articles.map((article, index) => (
         <div key={article.id} className="news-item">
           <span className="news-number">{(currentPage - 1) * 20 + index + 1}.</span>
-          <button className="upvote-button">▲</button>
           <a href={article.link} target="_blank" rel="noopener noreferrer" className="news-link">
             {article.headline}
           </a>
@@ -94,7 +105,13 @@ const NewsList: React.FC<NewsListProps> = ({ onLoadingChange, onErrorChange, art
       ))}
 
       <div className="pagination">
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+        {pageGroup > 0 && (
+          <span className="page-nav" onClick={handlePrevGroup}>
+            &lt;
+          </span>
+        )}
+
+        {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
           <span
             key={page}
             className={`page-number ${page === currentPage ? 'active' : ''}`}
@@ -103,6 +120,12 @@ const NewsList: React.FC<NewsListProps> = ({ onLoadingChange, onErrorChange, art
             {page}
           </span>
         ))}
+
+        {(pageGroup + 1) * 10 < totalPages && (
+          <span className="page-nav" onClick={handleNextGroup}>
+            &gt;
+          </span>
+        )}
       </div>
     </div>
   );
