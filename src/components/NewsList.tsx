@@ -89,8 +89,8 @@ const NewsList: React.FC<NewsListProps> = ({ onLoadingChange, onErrorChange, art
     if ((pageGroup + 1) * 10 < totalPages) setPageGroup(pageGroup + 1);
   };
 
-  const startPage = pageGroup * 10 + 1;
-  const endPage = Math.min((pageGroup + 1) * 10, totalPages);
+  const startPage = pageGroup * 5 + 1;
+  const endPage = Math.min((pageGroup + 1) * 5, totalPages);
 
   return (
     <div className="news-list">
