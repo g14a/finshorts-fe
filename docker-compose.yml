@@ -1,0 +1,56 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: clear
+      POSTGRES_DB: finshorts
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - nw
+
+  go-server:
+    image: ghcr.io/g14a/finshorts/finshorts-backend:latest
+    container_name: go_server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      ENVIRONMENT: production
+    ports:
+      - "8080:8080"
+    networks:
+      - nw
+    depends_on:
+      - postgres
+    restart: on-failure
+
+  fe-server:
+    image: ghcr.io/g14a/finshorts-fe/finshorts-frontend:latest
+    container_name: fe_server
+    environment:
+      ENVIRONMENT: production
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:3000"
+    networks:
+      - nw
+    depends_on:
+      - go-server
+      - postgres
+    restart: on-failure
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  nw:
+    driver: bridge
