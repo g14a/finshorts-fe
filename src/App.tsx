@@ -44,7 +44,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Finshorts</h1>
+        <h1>BizBrief</h1>
       </header>
       <div className="top-bar">
         <a href="#" className="home-link" onClick={handleHomeClick}>

@@ -8,7 +8,8 @@
 
 .news-item {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   padding: 1rem 0;
   border-bottom: 1px solid #ccc;
   width: 100%;
@@ -22,18 +23,18 @@
   }
 }
 
+/* Ensures the numbers and text stay in a row */
 .news-number {
-  margin-right: 0.5rem;
-  width: 2rem;
-  text-align: right;
+  margin-right: 1rem;
   flex-shrink: 0;
+  text-align: right;
+  font-size: 1.2rem; /* Ensuring it's readable on mobile */
 }
 
 .news-link {
   font-size: 1.1rem;
   color: #333;
   text-decoration: none;
-  margin-right: 0.5rem;
   flex-grow: 1;
 }
 
@@ -50,8 +51,9 @@
 .news-source {
   font-size: 0.875rem;
   color: #999;
+  margin-left: 0.5rem;
   flex-shrink: 0;
-  padding-top: 0.5rem;
+  text-align: right;
 }
 
 @media (min-width: 48rem) {
@@ -60,19 +62,26 @@
   }
 }
 
-/* Pagination section */
+/* Pagination section fix */
 .pagination {
   margin-top: 2rem;
   text-align: center;
+  display: flex;
+  flex-wrap: wrap; /* Ensure the pagination wraps on small screens */
+  justify-content: center;
+  gap: 0.5rem; /* Adds spacing between buttons */
 }
 
-.page-number {
+.page-number, .page-nav {
   cursor: pointer;
-  margin: 0 0.5rem;
-  padding: 0.8rem 1rem;
+  padding: 0.6rem 1rem;
   border: 1px solid #ccc;
   border-radius: 0.5rem;
   font-size: 1rem;
+  background-color: #f1f1f1;
+  flex-shrink: 0; /* Ensures that buttons don’t collapse */
+  min-width: 3rem;
+  text-align: center;
 }
 
 .page-number.active {
