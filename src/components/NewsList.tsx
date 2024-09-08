@@ -39,7 +39,7 @@ export const fetchArticles = async (
 ) => {
   onLoadingChange(true);
   try {
-    let url = `http://localhost:8080/articles?page=${page}&pageSize=20`;
+    let url = `https://bizbrief.in/api/articles?page=${page}&pageSize=20`;
 
     if (query) {
       url = `${url}&keyword=${query}`;
