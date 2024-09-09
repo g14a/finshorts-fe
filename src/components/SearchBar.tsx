@@ -22,7 +22,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearchResults, onSearchError, o
         if (!localQuery) return;
 
         try {
-            setQuery(localQuery); // Update the query in App.tsx
+            setQuery(localQuery); 
             await fetchArticles(
                 1, 
                 localQuery,

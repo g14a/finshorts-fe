@@ -52,11 +52,11 @@ export const fetchArticles = async (
     const response = await axios.get<PaginatedResponse>(url);
 
     if (!response.data.articles || response.data.articles.length === 0) {
-      setArticles([]); // Clear the articles if no articles found
+      setArticles([]); 
     } else {
       setArticles(response.data.articles);
       setTotalPages(response.data.totalPages);
-      onErrorChange(null); // Clear any previous errors
+      onErrorChange(null); 
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {
