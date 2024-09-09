@@ -10,7 +10,7 @@ export interface Article {
 }
 
 interface PaginatedResponse {
-  articles: Article[];
+  articles: Article[] | null;
   totalItems: number;
   totalPages: number;
   currentPage: number;
@@ -50,9 +50,14 @@ export const fetchArticles = async (
     }
 
     const response = await axios.get<PaginatedResponse>(url);
-    setArticles(response.data.articles);
-    setTotalPages(response.data.totalPages);
-    onErrorChange(null);
+
+    if (!response.data.articles || response.data.articles.length === 0) {
+      setArticles([]); // Clear the articles if no articles found
+    } else {
+      setArticles(response.data.articles);
+      setTotalPages(response.data.totalPages);
+      onErrorChange(null); // Clear any previous errors
+    }
   } catch (error) {
     if (axios.isAxiosError(error)) {
       onErrorChange(error.message);
@@ -64,9 +69,19 @@ export const fetchArticles = async (
   }
 };
 
-const NewsList: React.FC<NewsListProps> = ({ onLoadingChange, onErrorChange, articles, setArticles, query, websiteFilter, currentPage, setCurrentPage }) => {
+const NewsList: React.FC<NewsListProps> = ({
+  onLoadingChange,
+  onErrorChange,
+  articles,
+  setArticles,
+  query,
+  websiteFilter,
+  currentPage,
+  setCurrentPage,
+}) => {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [pageGroup, setPageGroup] = useState<number>(0); // To track the group of pages (set of 10)
+  const [error, setError] = useState<string | null>(null);
 
   const getDomainName = (url: string) => {
     const hostname = new URL(url).hostname;
@@ -74,8 +89,16 @@ const NewsList: React.FC<NewsListProps> = ({ onLoadingChange, onErrorChange, art
   };
 
   useEffect(() => {
-    fetchArticles(currentPage, query, websiteFilter, setArticles, setTotalPages, onLoadingChange, onErrorChange);
-  }, [currentPage, query, websiteFilter, setArticles, onLoadingChange, onErrorChange]);
+    fetchArticles(
+      currentPage,
+      query,
+      websiteFilter,
+      setArticles,
+      setTotalPages,
+      onLoadingChange,
+      setError
+    );
+  }, [currentPage, query, websiteFilter, setArticles, onLoadingChange]);
 
   const handlePageClick = (page: number) => {
     setCurrentPage(page);
@@ -94,39 +117,53 @@ const NewsList: React.FC<NewsListProps> = ({ onLoadingChange, onErrorChange, art
 
   return (
     <div className="news-list">
-      {articles.map((article, index) => (
-        <div key={article.id} className="news-item">
-          <span className="news-number">{(currentPage - 1) * 20 + index + 1}.</span>
-          <a href={article.link} target="_blank" rel="noopener noreferrer" className="news-link">
-            {article.headline}
-          </a>
-          <span className="news-source">({getDomainName(article.website)})</span>
-        </div>
-      ))}
-
-      <div className="pagination">
-        {pageGroup > 0 && (
-          <span className="page-nav" onClick={handlePrevGroup}>
-            &lt;
-          </span>
-        )}
-
-        {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
-          <span
-            key={page}
-            className={`page-number ${page === currentPage ? 'active' : ''}`}
-            onClick={() => handlePageClick(page)}
-          >
-            {page}
-          </span>
-        ))}
-
-        {(pageGroup + 1) * 10 < totalPages && (
-          <span className="page-nav" onClick={handleNextGroup}>
-            &gt;
-          </span>
-        )}
-      </div>
+      {error ? (
+        <div className="error-message">{error}</div>
+      ) : (
+        <>
+          {articles.map((article, index) => (
+            <div key={article.id} className="news-item">
+              <span className="news-number">
+                {(currentPage - 1) * 20 + index + 1}.
+              </span>
+              <a
+                href={article.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="news-link"
+              >
+                {article.headline}
+              </a>
+              <span className="news-source">
+                ({getDomainName(article.website)})
+              </span>
+            </div>
+          ))}
+          <div className="pagination">
+            {pageGroup > 0 && (
+              <span className="page-nav" onClick={handlePrevGroup}>
+                &lt;
+              </span>
+            )}
+            {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
+              <span
+                key={page}
+                className={`page-number ${
+                  page === currentPage ? 'active' : ''
+                }`}
+                onClick={() => handlePageClick(page)}
+              >
+                {page}
+              </span>
+            ))}
+            {(pageGroup + 1) * 10 < totalPages && (
+              <span className="page-nav" onClick={handleNextGroup}>
+                &gt;
+              </span>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };

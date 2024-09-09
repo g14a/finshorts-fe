@@ -32,7 +32,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearchResults, onSearchError, o
                 onLoadingChange,
                 (error: string | null) => {
                     if (error) {
-                        onSearchError('An error occurred during the search');
+                        onSearchError('No articles found');
                     } else {
                         onSearchError('');
                     }
