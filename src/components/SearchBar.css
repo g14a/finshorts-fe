@@ -1,30 +1,95 @@
-.search-bar {
-    margin: 0.5rem;
+.search-bar-container {
+    width: 80%;
     display: flex;
+    justify-content: left;
     align-items: center;
-    flex-grow: 2;
-    border-radius: 4px;
-    border: none;
 }
 
-.search-bar input {
-    padding: 0.8rem;
+.search-bar-and-chips {
+    margin: 1rem;
+    display: flex;
+    align-items: center;
     width: 100%;
-    font-size: 1rem;
+    max-width: 90%; /* Limit the width for better design */
+    gap: 1rem; /* Increased gap between elements */
+    flex-wrap: wrap; /* Wrap on smaller screens */
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
     flex-grow: 1;
 }
 
-.search-bar button {
-    margin: 1rem;
-    padding: 1rem;
-    background-color: #6c757d;
+.search-bar-and-chips input {
+    padding: 0.5rem; /* Add more padding for a larger, cleaner feel */
+    width: 100%; /* Full width for the input */
+    max-width: 30%; /* Restrict the input width */
+    font-size: 1rem;
+    border: 2px solid #ccc; /* Bolder border */
+    border-radius: 4px; /* Rounded corners */
+    transition: border-color 0.3s ease; /* Smooth transition */
+}
+
+.search-bar-and-chips input:focus {
+    outline: none;
+    border-color: #05846a; /* Highlight on focus */
+}
+
+.search-bar-and-chips button {
+    padding: 0.7rem 1.5rem; /* Add more padding for the button */
+    background-color: #05846a; /* Primary color for the button */
     color: white;
     border: none;
     cursor: pointer;
     font-size: 1rem;
     border-radius: 4px;
+    transition: background-color 0.3s ease;
 }
 
-.search-bar button:hover {
-    background-color: #218838;
+.search-bar-and-chips button:hover {
+    background-color: #045b4d; /* Darker shade on hover */
+}
+
+.chip-container {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap; 
+}
+
+.chip {
+    padding: 0.6rem 1rem;
+    background-color: #e0e0e0;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.chip:hover {
+    background-color: #05846a;
+    color: white;
+}
+
+/* Style for the selected chip */
+.chip-selected {
+    background-color: #05846a;
+    color: white;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .search-bar-and-chips {
+        justify-content: center;
+    }
+
+    .search-bar input {
+        width: 100%; /* Full width for smaller screens */
+        margin-bottom: 0.5rem; /* Add space below the search bar on mobile */
+    }
+
+    .chip-container {
+        justify-content: center;
+    }
 }

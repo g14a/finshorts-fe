@@ -7,6 +7,16 @@
   font-family: 'Arial', sans-serif;
 }
 
+/* Styling for the clickable header link */
+.header-link {
+  color: white;
+  text-decoration: none;
+}
+
+.header-link:hover {
+  text-decoration: underline;
+}
+
 .App-header {
   background-color: #05846a;
   padding: 1rem;
@@ -27,7 +37,6 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  padding: 0.5rem 1rem;
 }
 
 @media (min-width: 48rem) {
@@ -49,38 +58,27 @@ h1 {
   }
 }
 
-.home-link {
-  text-decoration: none;
-  color: #007bff;
-  font-size: 1rem;
-  padding: 0.5rem 0;
-}
-
 @media (min-width: 48rem) {
   .home-link {
     padding: 1rem;
   }
 }
 
-.home-link:hover {
-  text-decoration: underline;
-}
-
 .top-bar .domain-filter {
-  padding: 0.6rem;
+  width: 18%;
+  max-width: 40%;
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #ffffff; 
   color: #333; 
-  margin: 0.5rem 0;
   transition: all 0.3s ease; 
 }
 
 @media (min-width: 48rem) {
   .top-bar .domain-filter {
     margin: 0.5rem;
-    padding: 0.9rem;
+    padding: 0.5rem;
   }
 }
 

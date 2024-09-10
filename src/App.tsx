@@ -24,12 +24,12 @@ function App() {
     setArticles([]);
     setError(null);
     setLoading(true);
-    setQuery('')
-    setTotalPages(0)
-    setCurrentPage(1)
+    setQuery('');
+    setTotalPages(0);
+    setCurrentPage(1);
     setSelectedDomain(''); 
     // Fetch the first page of articles as the default when returning home
-    fetchArticles(1, "", null, setArticles, setTotalPages, setLoading, setError);
+    fetchArticles(1, '', null, setArticles, setTotalPages, setLoading, setError);
   };
 
   const handleSearchError = (message: string) => {
@@ -44,12 +44,11 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>BizBrief</h1>
+        <a href="#" onClick={handleHomeClick} className="header-link">
+          <h1>BizBrief</h1>
+        </a>
       </header>
       <div className="top-bar">
-        <a href="#" className="home-link" onClick={handleHomeClick}>
-          Home
-        </a>
         <SearchBar
           onSearchResults={handleSearchResults}
           onSearchError={handleSearchError}
