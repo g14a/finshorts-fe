@@ -68,6 +68,7 @@ function App() {
           <option value="financialexpress">Financial Express</option>
           <option value="deccanherald">Deccan Herald</option>
           <option value="businesstoday">Business Today</option>
+          <option value="hindustantimes">Hindustan Times</option>
         </select>
       </div>
       {error && <div>Error: {error}</div>}
