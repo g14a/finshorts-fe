@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Mobile First Approach */
 .App {
   width: 100%; /* Take full width on mobile */
@@ -22,6 +26,7 @@
   padding: 1rem;
   color: white;
   text-align: left;
+  text-align: center; /* Center align for mobile */
 }
 
 /* Responsive adjustments for larger screens */
@@ -53,14 +58,30 @@ h1 {
 }
 
 @media (min-width: 48rem) {
-  h1 {
-    font-size: 1.5rem;
+  .App {
+    width: calc(100% - 30rem);
+    max-width: calc(100% - 30rem);
+    padding: 0;
   }
-}
 
-@media (min-width: 48rem) {
-  .home-link {
-    padding: 1rem;
+  .App-header {
+    text-align: left;
+  }
+
+  .top-bar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .domain-filter {
+    width: 18%;
+    max-width: 40%;
+  }
+
+  button {
+    width: auto;
+    margin-left: 1rem;
   }
 }
 
@@ -98,4 +119,20 @@ h1 {
 
 .top-bar .domain-filter option:hover {
   background-color: #f1f1f1; 
+}
+
+/* Tailwind-specific custom adjustments */
+
+@media (min-width: 640px) {
+  /* For small screens and above */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+/* Domain select box */
+.domain-filter {
+  width: 100%;
+  max-width: 200px; /* Adjust max-width for larger screens */
 }

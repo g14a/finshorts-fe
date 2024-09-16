@@ -24,7 +24,7 @@
 .search-bar-and-chips input {
     padding: 0.5rem; /* Add more padding for a larger, cleaner feel */
     width: 100%; /* Full width for the input */
-    max-width: 30%; /* Restrict the input width */
+    max-width: 20%; /* Restrict the input width */
     font-size: 1rem;
     border: 2px solid #ccc; /* Bolder border */
     border-radius: 4px; /* Rounded corners */
@@ -37,7 +37,7 @@
 }
 
 .search-bar-and-chips button {
-    padding: 0.7rem 1.5rem; /* Add more padding for the button */
+    padding: 0.65rem; /* Add more padding for the button */
     background-color: #05846a; /* Primary color for the button */
     color: white;
     border: none;

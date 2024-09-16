@@ -32,10 +32,11 @@
 }
 
 .news-link {
+  display: inline-block;
   font-size: 1.1rem;
   color: #333;
   text-decoration: none;
-  flex-grow: 1;
+  width: calc(100% - 4rem); /* Allow the link to take most of the width */
 }
 
 @media (min-width: 48rem) {
@@ -54,6 +55,7 @@
   margin-left: 0.5rem;
   flex-shrink: 0;
   text-align: right;
+  display: block;
 }
 
 @media (min-width: 48rem) {

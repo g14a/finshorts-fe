@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import './NewsList.css';
 import axios from 'axios';
-import { formatDistanceToNow, parseISO } from 'date-fns'; // Import from date-fns
+import { formatDistanceToNow, parseISO } from 'date-fns';
 
 export interface Article {
   id: string;
   headline: string;
   link: string;
   website: string;
-  created_at: string; // Add created_at field
+  created_at: string;
 }
 
 interface PaginatedResponse {
@@ -54,11 +53,11 @@ export const fetchArticles = async (
     const response = await axios.get<PaginatedResponse>(url);
 
     if (!response.data.articles || response.data.articles.length === 0) {
-      setArticles([]); 
+      setArticles([]);
     } else {
       setArticles(response.data.articles);
       setTotalPages(response.data.totalPages);
-      onErrorChange(null); 
+      onErrorChange(null);
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -82,7 +81,7 @@ const NewsList: React.FC<NewsListProps> = ({
   setCurrentPage,
 }) => {
   const [totalPages, setTotalPages] = useState<number>(0);
-  const [pageGroup, setPageGroup] = useState<number>(0); // To track the group of pages (set of 10)
+  const [pageGroup, setPageGroup] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
 
   const getDomainName = (url: string) => {
@@ -118,55 +117,51 @@ const NewsList: React.FC<NewsListProps> = ({
   const endPage = Math.min((pageGroup + 1) * 5, totalPages);
 
   return (
-    <div className="news-list">
+    <div className="news-list mt-4">
       {error ? (
-        <div className="error-message">{error}</div>
+        <div className="text-red-500">{error}</div>
       ) : (
         <>
           {articles.map((article, index) => (
-            <div key={article.id} className="news-item">
-              <span className="news-number">
-                {(currentPage - 1) * 20 + index + 1}.
-              </span>
-              <a
-                href={article.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="news-link"
-              >
-                {article.headline}
-              </a>
-              <span className="news-source">
-                ({getDomainName(article.website)}) &nbsp; 
-                {/* Display relative time */}
-                <span className="news-time">
-                  {formatDistanceToNow(parseISO(article.created_at), {
-                    includeSeconds: false,
-                    addSuffix: true
-                  }).replace('about', '')}
+            <div key={article.id} className="news-item flex justify-between py-4 border-b border-gray-300">
+              <div className="flex">
+                <span className="news-number text-gray-500 mr-2">{(currentPage - 1) * 20 + index + 1}.</span>
+                <a
+                  href={article.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="news-link text-teal-700 hover:underline"
+                >
+                  {article.headline.split(' ').length > 20 ? `${article.headline.slice(0, 100)}...(click to read more)` : article.headline}
+                </a>
+              </div>
+              <div className="text-right">
+                <span className="news-source text-gray-500">
+                  ({getDomainName(article.website)}) &nbsp;
                 </span>
-              </span>
+                <span className="news-time text-gray-500">
+                  {formatDistanceToNow(parseISO(article.created_at), { addSuffix: true }).replace('about ', '').replace('minutes', 'min')}
+                </span>
+              </div>
             </div>
           ))}
-          <div className="pagination">
+          <div className="pagination flex justify-center mt-4 gap-2">
             {pageGroup > 0 && (
-              <span className="page-nav" onClick={handlePrevGroup}>
+              <span className="page-nav cursor-pointer" onClick={handlePrevGroup}>
                 &lt;
               </span>
             )}
             {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
               <span
                 key={page}
-                className={`page-number ${
-                  page === currentPage ? 'active' : ''
-                }`}
+                className={`page-number cursor-pointer py-1 px-3 border rounded ${page === currentPage ? 'bg-teal-700 text-white' : 'bg-gray-200'}`}
                 onClick={() => handlePageClick(page)}
               >
                 {page}
               </span>
             ))}
             {(pageGroup + 1) * 10 < totalPages && (
-              <span className="page-nav" onClick={handleNextGroup}>
+              <span className="page-nav cursor-pointer" onClick={handleNextGroup}>
                 &gt;
               </span>
             )}
