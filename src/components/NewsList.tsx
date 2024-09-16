@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import './NewsList.css';
 import axios from 'axios';
+import { formatDistanceToNow, parseISO } from 'date-fns'; // Import from date-fns
 
 export interface Article {
   id: string;
   headline: string;
   link: string;
   website: string;
+  created_at: string; // Add created_at field
 }
 
 interface PaginatedResponse {
@@ -85,7 +87,7 @@ const NewsList: React.FC<NewsListProps> = ({
 
   const getDomainName = (url: string) => {
     const hostname = new URL(url).hostname;
-    return hostname.startsWith('www.') ? hostname.slice(4) : hostname;
+    return (hostname.startsWith('www.') ? hostname.slice(4) : hostname).split('.')[0];
   };
 
   useEffect(() => {
@@ -135,7 +137,14 @@ const NewsList: React.FC<NewsListProps> = ({
                 {article.headline}
               </a>
               <span className="news-source">
-                ({getDomainName(article.website)})
+                ({getDomainName(article.website)}) &nbsp; 
+                {/* Display relative time */}
+                <span className="news-time">
+                  {formatDistanceToNow(parseISO(article.created_at), {
+                    includeSeconds: false,
+                    addSuffix: true
+                  }).replace('about', '')}
+                </span>
               </span>
             </div>
           ))}
