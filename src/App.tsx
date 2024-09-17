@@ -44,6 +44,7 @@ function App() {
       <header className="App-header bg-teal-700 text-white p-4 text-center">
         <a href="#" onClick={handleHomeClick} className="header-link">
           <h1 className="text-2xl font-bold">BizBrief</h1>
+          <h1 className="text-0.5xl font-bold">Your business news aggregator buddy</h1>
         </a>
       </header>
       
