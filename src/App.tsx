@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import NewsList, { fetchArticles } from './components/NewsList';
+import NewsList from './components/NewsList';
 import SearchBar from './components/SearchBar';
-import { Article } from './components/NewsList';
-import './App.css';  
+import './App.css';
+import { Article, fetchArticles } from './components/Api';
 
 function App() {
   const [articles, setArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState<string>(''); 
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -20,13 +20,7 @@ function App() {
   };
 
   const handleHomeClick = () => {
-    setArticles([]);
-    setError(null);
-    setLoading(true);
-    setQuery('');
-    setTotalPages(0);
-    setCurrentPage(1);
-    setSelectedDomain('');
+    resetState();
     fetchArticles(1, '', null, setArticles, setTotalPages, setLoading, setError);
   };
 
@@ -39,12 +33,22 @@ function App() {
     setSelectedDomain(event.target.value);
   };
 
+  const resetState = () => {
+    setArticles([]);
+    setError(null);
+    setLoading(true);
+    setQuery('');
+    setTotalPages(0);
+    setCurrentPage(1);
+    setSelectedDomain('');
+  };
+
   return (
     <div className="App">
       <header className="App-header bg-teal-700 text-white p-4 text-center">
         <a href="#" onClick={handleHomeClick} className="header-link">
           <h1 className="text-2xl font-bold">BizBrief</h1>
-          <h1 className="text-0.5xl font-bold">Your business news aggregator buddy</h1>
+          <h2 className="text-sm font-bold">Your business news aggregator buddy</h2>
         </a>
       </header>
       
@@ -57,7 +61,7 @@ function App() {
           setArticles={setArticles}
           setQuery={setQuery}
         />
-        
+
         <div className="w-full sm:w-auto mt-4 sm:mt-0 sm:ml-4">
           <select 
             value={selectedDomain} 
@@ -81,7 +85,6 @@ function App() {
       {error && <div className="text-red-500 text-center">{error}</div>}
       {articles.length === 0 && !error && !loading && <div className="text-center">No articles to display.</div>}
 
-      {/* Pass the query to NewsList */}
       <NewsList
         onLoadingChange={setLoading}
         onErrorChange={setError}

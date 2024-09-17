@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { fetchArticles, Article } from './NewsList';
 import debounce from 'lodash.debounce';
+import { Article, fetchArticles } from './Api';
 
 interface SearchBarProps {
   onSearchResults: (articles: Article[], totalPages: number) => void;
@@ -24,11 +24,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   const debouncedSearch = useCallback(
     debounce((searchQuery: string) => {
-      if (searchQuery) {
-        handleSearch(searchQuery);
-      }
-    }, 300), 
-    []
+      handleSearch(searchQuery);
+    }, 300), []
   );
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,52 +35,41 @@ const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   const handleSearch = async (searchQuery: string) => {
-    if (!searchQuery) return;
-
-    try {
-      setQuery(searchQuery); 
-      await fetchArticles(
-        1,
-        searchQuery,
-        null,
-        setArticles,
-        setTotalPages,
-        onLoadingChange,
-        (error: string | null) => {
-          if (error) {
-            onSearchError('No articles found');
-          } else {
-            onSearchError('');
-          }
+    setQuery(searchQuery); 
+    await fetchArticles(
+      1,
+      searchQuery,
+      null,
+      setArticles,
+      setTotalPages,
+      onLoadingChange,
+      (error: string | null) => {
+        if (error) {
+          onSearchError('No articles found');
+        } else {
+          onSearchError('');
         }
-      );
-    } catch (error) {
-      console.error('Search error:', error);
-      onSearchError('An error occurred during the search');
-    }
+      }
+    );
   };
 
   const handleChipClick = (chipQuery: string) => {
-    if (selectedChip !== chipQuery) {
+    if (selectedChip === chipQuery) {
+      setSelectedChip(null);
+      handleSearch('');
+    } else {
       setSelectedChip(chipQuery);
       handleSearch(chipQuery);
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      handleSearch(localQuery);
-    }
-  };
-
   return (
     <div className="search-bar-container flex flex-col sm:flex-row items-center w-full">
-      <div className="flex w-full sm:w-auto items-center space-x-2"> 
+      <div className="flex w-full sm:w-auto items-center space-x-2">
         <input
           type="text"
           value={localQuery}
           onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
           placeholder="Search for articles..."
           className="w-full px-4 py-2 border border-gray-300 rounded sm:w-full sm:max-w-xs"
         />
