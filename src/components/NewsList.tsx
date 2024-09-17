@@ -29,6 +29,23 @@ interface NewsListProps {
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
+// Function to highlight the search keyword
+const highlightText = (text: string, keyword: string) => {
+  if (!keyword) return text; // Return the text if no keyword is entered
+  const parts = text.split(new RegExp(`(${keyword})`, 'gi'));
+  return (
+    <>
+      {parts.map((part, i) =>
+        part.toLowerCase() === keyword.toLowerCase() ? (
+          <span key={i} className="bg-yellow-300">{part}</span>
+        ) : (
+          part
+        )
+      )}
+    </>
+  );
+};
+
 export const fetchArticles = async (
   page: number,
   query: string,
@@ -132,7 +149,7 @@ const NewsList: React.FC<NewsListProps> = ({
                   rel="noopener noreferrer"
                   className="news-link hover:underline"
                 >
-                  {article.headline.split(' ').length > 50 ? `${article.headline.slice(0, 100)}...(click to read more)` : article.headline}
+                  {highlightText(article.headline.split(' ').length > 50 ? `${article.headline.slice(0, 100)}...(click to read more)` : article.headline, query)}
                 </a>
               </div>
               <div className="text-right">
