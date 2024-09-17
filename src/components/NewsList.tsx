@@ -99,7 +99,7 @@ const NewsList: React.FC<NewsListProps> = ({
       onLoadingChange,
       setError
     );
-  }, [currentPage, query, websiteFilter, setArticles, onLoadingChange]);
+  }, [currentPage, query, websiteFilter]);
 
   const handlePageClick = (page: number) => {
     setCurrentPage(page);
@@ -123,16 +123,16 @@ const NewsList: React.FC<NewsListProps> = ({
       ) : (
         <>
           {articles.map((article, index) => (
-            <div key={article.id} className="news-item flex justify-between py-4 border-b border-gray-300">
+            <div key={article.id} className="news-item flex md:flex-row flex-col justify-between py-4 border-b border-gray-300">
               <div className="flex">
                 <span className="news-number text-gray-500 mr-2">{(currentPage - 1) * 20 + index + 1}.</span>
                 <a
                   href={article.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="news-link text-teal-700 hover:underline"
+                  className="news-link hover:underline"
                 >
-                  {article.headline.split(' ').length > 20 ? `${article.headline.slice(0, 100)}...(click to read more)` : article.headline}
+                  {article.headline.split(' ').length > 50 ? `${article.headline.slice(0, 100)}...(click to read more)` : article.headline}
                 </a>
               </div>
               <div className="text-right">

@@ -46,7 +46,8 @@ function App() {
           <h1 className="text-2xl font-bold">BizBrief</h1>
         </a>
       </header>
-      <div className="top-bar p-4 flex flex-col sm:flex-row sm:justify-between items-start">
+      
+      <div className="top-bar p-4 flex flex-col sm:flex-row sm:justify-between items-start w-full">
         <SearchBar
           onSearchResults={handleSearchResults}
           onSearchError={handleSearchError}
@@ -55,31 +56,37 @@ function App() {
           setArticles={setArticles}
           setQuery={setQuery}
         />
-        <select 
-          value={selectedDomain} 
-          onChange={handleDomainChange} 
-          className="domain-filter border border-gray-300 rounded px-4 py-2 mt-4 sm:mt-0 w-full sm:w-auto"
-        >
-          <option value="">Select Domain</option>
-          <option value="livemint">Livemint</option>
-          <option value="investopedia">Investopedia</option>
-          <option value="economictimes">Economic Times</option>
-          <option value="timesofindia">Times of India</option>
-          <option value="outlookbusiness">Outlook Business</option>
-          <option value="financialexpress">Financial Express</option>
-          <option value="deccanherald">Deccan Herald</option>
-          <option value="businesstoday">Business Today</option>
-          <option value="hindustantimes">Hindustan Times</option>
-        </select>
+        
+        <div className="w-full sm:w-auto mt-4 sm:mt-0 sm:ml-4">
+          <select 
+            value={selectedDomain} 
+            onChange={handleDomainChange} 
+            className="domain-filter border border-gray-300 rounded px-4 py-2 w-full sm:w-auto"
+          >
+            <option value="">Select Domain</option>
+            <option value="livemint">Livemint</option>
+            <option value="investopedia">Investopedia</option>
+            <option value="economictimes">Economic Times</option>
+            <option value="timesofindia">Times of India</option>
+            <option value="outlookbusiness">Outlook Business</option>
+            <option value="financialexpress">Financial Express</option>
+            <option value="deccanherald">Deccan Herald</option>
+            <option value="businesstoday">Business Today</option>
+            <option value="hindustantimes">Hindustan Times</option>
+          </select>
+        </div>
       </div>
+
       {error && <div className="text-red-500 text-center">{error}</div>}
       {articles.length === 0 && !error && !loading && <div className="text-center">No articles to display.</div>}
+
+      {/* Pass the query to NewsList */}
       <NewsList
         onLoadingChange={setLoading}
         onErrorChange={setError}
         articles={articles}
         setArticles={setArticles}
-        query={query} 
+        query={query}
         currentPage={currentPage} 
         setCurrentPage={setCurrentPage}
         websiteFilter={selectedDomain} 

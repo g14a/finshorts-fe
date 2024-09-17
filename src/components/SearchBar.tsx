@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { fetchArticles, Article } from './NewsList';
+import debounce from 'lodash.debounce';
 
 interface SearchBarProps {
   onSearchResults: (articles: Article[], totalPages: number) => void;
@@ -21,15 +22,26 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const [localQuery, setLocalQuery] = useState<string>(''); 
   const [selectedChip, setSelectedChip] = useState<string | null>(null);
 
+  const debouncedSearch = useCallback(
+    debounce((searchQuery: string) => {
+      if (searchQuery) {
+        handleSearch(searchQuery);
+      }
+    }, 300), 
+    []
+  );
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLocalQuery(event.target.value);
+    const value = event.target.value;
+    setLocalQuery(value);
+    debouncedSearch(value); 
   };
 
   const handleSearch = async (searchQuery: string) => {
     if (!searchQuery) return;
 
     try {
-      setQuery(searchQuery);
+      setQuery(searchQuery); 
       await fetchArticles(
         1,
         searchQuery,
@@ -52,8 +64,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   const handleChipClick = (chipQuery: string) => {
-    setSelectedChip(chipQuery);
-    handleSearch(chipQuery);
+    if (selectedChip !== chipQuery) {
+      setSelectedChip(chipQuery);
+      handleSearch(chipQuery);
+    }
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -64,7 +78,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <div className="search-bar-container flex flex-col sm:flex-row items-center w-full">
-      <div className="flex w-full sm:w-auto items-center space-x-2"> {/* Adjust spacing between input and button */}
+      <div className="flex w-full sm:w-auto items-center space-x-2"> 
         <input
           type="text"
           value={localQuery}
@@ -81,15 +95,14 @@ const SearchBar: React.FC<SearchBarProps> = ({
         </button>
       </div>
 
-      {/* Chips container */}
       <div className="chip-container flex flex-wrap gap-2 mt-4 sm:mt-0 sm:ml-4 w-full sm:w-auto justify-center sm:justify-start">
-        {['ipo', 'banking', 'energy', 'nifty', 'infra', 'pharma'].map((chip) => (
+        {['IPO', 'banking', 'energy', 'nifty', 'infra', 'pharma'].map((chip) => (
           <div
             key={chip}
             className={`chip flex-grow text-center px-2 py-1 text-sm sm:px-4 sm:py-2 sm:text-base rounded-full cursor-pointer ${
               selectedChip === chip ? 'bg-teal-600 text-white' : 'bg-gray-200'
             }`}
-            onClick={() => handleChipClick(chip)}
+            onClick={() => handleChipClick(chip)} 
           >
             {chip.charAt(0).toUpperCase() + chip.slice(1)}
           </div>

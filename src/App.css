@@ -86,8 +86,8 @@ h1 {
 }
 
 .top-bar .domain-filter {
-  width: 18%;
-  max-width: 40%;
+  width: 100%;
+  max-width: 150%;
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
