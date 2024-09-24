@@ -42,25 +42,5 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
 
-      - name: Install SSH client
-        run: sudo apt-get install -y openssh-client
-  
-      - name: Add SSH key
-        uses: webfactory/ssh-agent@v0.8.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-  
-      - name: Copy docker-compose.yml to remote server
-        run: |
-            scp -o StrictHostKeyChecking=no docker-compose.yml root@170.187.238.123:~/docker-compose.yml
-  
-      - name: Deploy with Docker Compose
-        run: |
-          ssh -o StrictHostKeyChecking=no root@170.187.238.123 "
-          docker compose down &&
-          docker compose pull &&
-          docker compose up -d
-          "
-  
       - name: Log out from GitHub Container Registry
         run: docker logout ghcr.io

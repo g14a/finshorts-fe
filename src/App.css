@@ -26,8 +26,12 @@
   padding: 1rem;
   color: white;
   text-align: left;
-  text-align: center; /* Center align for mobile */
+  text-align: center;
+  display: flex; /* Add display flex */
+  justify-content: space-between; /* Align children */
+  align-items: center; /* Vertically center children */
 }
+
 
 /* Responsive adjustments for larger screens */
 @media (min-width: 48rem) {

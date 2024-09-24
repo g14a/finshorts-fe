@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import { Article, fetchArticles } from './Api';
+import { BACKEND_ROOT_URL } from './constants';
+import { Article, fetchArticles, upvoteArticle } from './api/api';
 
 interface NewsListProps {
   onLoadingChange: (isLoading: boolean) => void;
@@ -14,7 +15,6 @@ interface NewsListProps {
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-// Function to highlight the search keyword
 const highlightText = (text: string, keyword: string) => {
   if (!keyword) return text; // Return the text if no keyword is entered
   const parts = text.split(new RegExp(`(${keyword})`, 'gi'));
@@ -62,6 +62,8 @@ const NewsList: React.FC<NewsListProps> = ({
     );
   }, [currentPage, query, websiteFilter]);
 
+  const groupSize = 10;
+
   const handlePageClick = (page: number) => {
     setCurrentPage(page);
   };
@@ -71,11 +73,19 @@ const NewsList: React.FC<NewsListProps> = ({
   };
 
   const handleNextGroup = () => {
-    if ((pageGroup + 1) * 10 < totalPages) setPageGroup(pageGroup + 1);
+    if ((pageGroup + 1) * groupSize < totalPages) setPageGroup(pageGroup + 1);
   };
 
-  const startPage = pageGroup * 5 + 1;
-  const endPage = Math.min((pageGroup + 1) * 5, totalPages);
+  const startPage = pageGroup * groupSize + 1;
+  const endPage = Math.min((pageGroup + 1) * groupSize, totalPages);
+
+  const handleUpvote = async (articleId: string) => {
+    try {
+      await upvoteArticle(articleId)
+    } catch (error) {
+      console.error('Failed to upvote article:', error);
+    }
+  };
 
   return (
     <div className="news-list mt-4">
@@ -85,8 +95,21 @@ const NewsList: React.FC<NewsListProps> = ({
         <>
           {articles.map((article, index) => (
             <div key={article.id} className="news-item flex md:flex-row flex-col justify-between py-4 border-b border-gray-300">
-              <div className="flex">
-                <span className="news-number text-gray-500 mr-2">{(currentPage - 1) * 20 + index + 1}.</span>
+              <div className="flex items-center">
+                {/* Article Number */}
+                <span className="news-number text-gray-500 mr-2">
+                  {(currentPage - 1) * 20 + index + 1}.
+                </span>
+                
+                {/* Upvote Icon */}
+                <span
+                  className="upvote-icon mx-2 cursor-pointer text-gray-400 hover:text-[#05846a]"
+                  onClick={() => handleUpvote(article.id)}
+                >
+                  ▲
+                </span>
+
+                {/* Article Headline */}
                 <a
                   href={article.link}
                   target="_blank"
@@ -121,7 +144,7 @@ const NewsList: React.FC<NewsListProps> = ({
                 {page}
               </span>
             ))}
-            {(pageGroup + 1) * 10 < totalPages && (
+            {(pageGroup + 1) * groupSize < totalPages && (
               <span className="page-nav cursor-pointer" onClick={handleNextGroup}>
                 &gt;
               </span>

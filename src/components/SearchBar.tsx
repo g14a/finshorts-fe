@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import debounce from 'lodash.debounce';
-import { Article, fetchArticles } from './Api';
+import { Article, fetchArticles } from './api/api';
 
 interface SearchBarProps {
   onSearchResults: (articles: Article[], totalPages: number) => void;
