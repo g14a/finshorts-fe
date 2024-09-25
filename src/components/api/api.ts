@@ -19,6 +19,7 @@ export interface Article {
     link: string;
     website: string;
     created_at: string;
+    upvote_count: number;
 }
 
 export interface PaginatedResponse {
