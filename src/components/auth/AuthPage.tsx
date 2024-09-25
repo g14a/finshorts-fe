@@ -9,41 +9,48 @@ const AuthPage: React.FC = () => {
   const [email, setEmail] = useState(''); // Email field for signup
   const [username, setUsername] = useState(''); // Username field for signup
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
+    const url = isLoginMode
+      ? `${BACKEND_ROOT_URL}/users/login`
+      : `${BACKEND_ROOT_URL}/users/signup`;
+
+    const payload = isLoginMode
+      ? { identifier, password }
+      : { username, email, password };
+
     try {
-      const url = isLoginMode
-        ? `${BACKEND_ROOT_URL}/users/login`
-        : `${BACKEND_ROOT_URL}/users/signup`;
-
-      const payload = isLoginMode
-        ? { identifier, password }
-        : { username, email, password };
-
       const response = await axios.post(url, payload);
 
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
         const data = response.data;
-
         if (data.token) {
           localStorage.setItem('authToken', data.token);
           window.location.href = '/';
-          return;
+        } else if (!isLoginMode) {
+          setError(null);
+          setSuccess("We have sent you an email. Please verify.");
         }
-      } else if (response.status === 404) {
-        setError('User not found. Please sign up.');
-        setIsLoginMode(false); 
-      } else {
-        setError(response.data.message || 'Something went wrong.');
       }
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        setError(error.response.data.message || 'An error occurred. Please try again.');
+      setSuccess('');  
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          if (error.response.status === 404) {
+            setError('User not found. Please sign up.');
+            setIsLoginMode(false);
+          } else {
+            setError(error.response.data.message || 'Something went wrong.');
+          }
+        } else {
+          setError('No response from server. Please try again later.');
+        }
       } else {
-        setError('An error occurred. Please try again.');
+        setError('An unexpected error occurred. Please try again.');
       }
     }
   };
@@ -52,6 +59,7 @@ const AuthPage: React.FC = () => {
     <div className="auth-container">
       <h2 className="text-2xl mb-4">{isLoginMode ? 'Login' : 'Sign Up'}</h2>
       {error && <div className="text-red-500 mb-4">{error}</div>}
+      {success && <div className="text-green-500 mb-4">{success}</div>}
       <form onSubmit={handleSubmit} className="flex flex-col">
         {isLoginMode ? (
           <input
@@ -97,6 +105,27 @@ const AuthPage: React.FC = () => {
           {isLoginMode ? 'Login' : 'Sign Up'}
         </button>
       </form>
+      {isLoginMode ? (
+        <div className="mt-4 text-center">
+          <a
+            href="#"
+            className="text-teal-700 hover:underline"
+            onClick={() => setIsLoginMode(false)}
+          >
+            Don't have an account? Sign up
+          </a>
+        </div>
+      ) : (
+        <div className="mt-4 text-center">
+          <a
+            href="#"
+            className="text-teal-700 hover:underline"
+            onClick={() => setIsLoginMode(true)}
+          >
+            Already have an account? Login
+          </a>
+        </div>
+      )}
     </div>
   );
 };
