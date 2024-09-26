@@ -93,7 +93,7 @@ function App() {
                     onChange={handleDomainChange}
                     className="domain-filter border border-gray-300 rounded px-4 py-2 w-full sm:w-auto"
                   >
-                    <option value="">Select Domain</option>
+                    <option value="">Show All Domains</option>
                     <option value="livemint">Livemint</option>
                     <option value="investopedia">Investopedia</option>
                     <option value="economictimes">Economic Times</option>
@@ -103,6 +103,8 @@ function App() {
                     <option value="deccanherald">Deccan Herald</option>
                     <option value="businesstoday">Business Today</option>
                     <option value="hindustantimes">Hindustan Times</option>
+                    <option value="hindubusinessline">Hindu Business Line</option>
+                    <option value="moneycontrol">Money Control</option>
                   </select>
                 </div>
               </div>
