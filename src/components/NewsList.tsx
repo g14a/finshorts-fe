@@ -82,6 +82,15 @@ const NewsList: React.FC<NewsListProps> = ({
   const handleUpvote = async (articleId: string) => {
     try {
       await upvoteArticle(articleId)
+      fetchArticles(
+        currentPage,
+        query,
+        websiteFilter,
+        setArticles,
+        setTotalPages,
+        onLoadingChange,
+        setError
+      );
     } catch (error) {
       console.error('Failed to upvote article:', error);
     }
@@ -100,10 +109,11 @@ const NewsList: React.FC<NewsListProps> = ({
                 <span className="news-number text-gray-500 mr-2">
                   {(currentPage - 1) * 20 + index + 1}.
                 </span>
-                
+
+                {/* Upvote Icon */}
                 {/* Upvote Icon */}
                 <span
-                  className="upvote-icon mx-2 cursor-pointer text-gray-400 hover:text-[#05846a]"
+                  className={`upvote-icon mx-2 cursor-pointer ${article.user_upvoted ? 'text-[#05846a]' : 'text-gray-400'} hover:text-[#05846a]`}
                   onClick={() => handleUpvote(article.id)}
                 >
                   ▲
@@ -119,7 +129,7 @@ const NewsList: React.FC<NewsListProps> = ({
                   {highlightText(article.headline.split(' ').length > 50 ? `${article.headline.slice(0, 100)}...(click to read more)` : article.headline, query)}
                 </a>
                 <div className="ml-2 text-sm text-gray-500">
-                  {article.upvote_count} upvotes
+                  {article.upvote_count == 1 ? `1 upvote` : `${article.upvote_count} upvotes`}
                 </div>
               </div>
               <div className="text-right">

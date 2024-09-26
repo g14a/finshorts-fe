@@ -20,6 +20,7 @@ export interface Article {
     website: string;
     created_at: string;
     upvote_count: number;
+    user_upvoted: boolean
 }
 
 export interface PaginatedResponse {
@@ -50,6 +51,16 @@ export const fetchArticles = async (
     onErrorChange: (error: string | null) => void
 ) => {
     onLoadingChange(true);
+    const token = localStorage.getItem('authToken');
+
+    var headers 
+
+    if (token) {
+        headers = {
+            Authorization: `Bearer ${token}`
+        }
+    }
+
     try {
         let url = `${BACKEND_ROOT_URL}/articles?page=${page}&pageSize=20`;
 
@@ -61,7 +72,9 @@ export const fetchArticles = async (
             url = `${url}&website=${websiteFilter}`;
         }
 
-        const response = await axios.get<PaginatedResponse>(url);
+        const response = await axios.get<PaginatedResponse>(url, {
+            headers
+        });
 
         const { articles, totalPages } = response.data;
         setArticles(articles || []);
