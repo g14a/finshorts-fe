@@ -42,12 +42,5 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
 
-      - name: Set Kube Config
-        run: | 
-            echo "${{ secrets.KUBECONFIGYAML }}" >> /tmp/kubeconfig.yaml 
-            export KUBECONFIG=/tmp/kubeconfig.yaml
-            helm upgrade bizbrief helm/ --install
-            kubectl rollout restart deployment fe-server
-
       - name: Log out from GitHub Container Registry
         run: docker logout ghcr.io
