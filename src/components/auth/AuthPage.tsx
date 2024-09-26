@@ -44,7 +44,7 @@ const AuthPage: React.FC = () => {
             setError('User not found. Please sign up.');
             setIsLoginMode(false);
           } else {
-            setError(error.response.data.message || 'Something went wrong.');
+            setError(error.response.data || 'Something went wrong.');
           }
         } else {
           setError('No response from server. Please try again later.');
