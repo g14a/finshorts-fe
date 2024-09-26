@@ -82,7 +82,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       </div>
 
       <div className="chip-container flex flex-wrap gap-2 mt-4 sm:mt-0 sm:ml-4 w-full sm:w-auto justify-center sm:justify-start">
-        {['IPO', 'banking', 'energy', 'nifty', 'infra', 'pharma'].map((chip) => (
+        {['IPO', 'banking', 'energy', 'infra','mutual funds'].map((chip) => (
           <div
             key={chip}
             className={`chip flex-grow text-center px-2 py-1 text-sm sm:px-4 sm:py-2 sm:text-base rounded-full cursor-pointer ${
