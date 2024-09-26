@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './Auth.css';
 import { BACKEND_ROOT_URL } from '../constants';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import './Auth.css';
 
 const AuthPage: React.FC = () => {
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const [identifier, setIdentifier] = useState(''); // New identifier field for login
-  const [email, setEmail] = useState(''); // Email field for signup
-  const [username, setUsername] = useState(''); // Username field for signup
+  const [identifier, setIdentifier] = useState(''); 
+  const [email, setEmail] = useState(''); 
+  const [username, setUsername] = useState(''); 
   const [password, setPassword] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  const handlePasswordVisibilityToggle = () => {
+    setPasswordVisible(!passwordVisible);
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -90,14 +96,22 @@ const AuthPage: React.FC = () => {
             />
           </>
         )}
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          className="mb-4 p-2 border rounded"
-          required
-        />
+        <div className="relative mb-4">
+          <input
+            type={passwordVisible ? 'text' : 'password'}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            className="w-full p-2 border rounded"
+            required
+          />
+          <span
+            className="absolute inset-y-0 right-0 pr-3 pb-4 flex items-center cursor-pointer"
+            onClick={handlePasswordVisibilityToggle}
+          >
+            {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+          </span>
+        </div>
         <button
           type="submit"
           className="bg-teal-700 text-white p-2 rounded"
