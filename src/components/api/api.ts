@@ -53,7 +53,7 @@ export const fetchArticles = async (
     onLoadingChange(true);
     const token = localStorage.getItem('authToken');
 
-    var headers 
+    var headers
 
     if (token) {
         headers = {
@@ -131,5 +131,57 @@ export const GetUserDetails = async () => {
         }
     } catch (error) {
         console.error('Failed to get user info:', error);
+    }
+}
+
+export const GetArticleById = async (articleId: string | undefined) => {
+    try {
+        if (articleId) {
+            const response = await axios.get(`${BACKEND_ROOT_URL}/articles/${articleId}`);
+
+            if (response.status == 200) {
+                return response.data
+            }
+        }
+    } catch (error) {
+        console.error('Failed to get article info:', error);
+    }
+}
+
+export const GetArticleComments = async (articleId: string | undefined) => {
+    try {
+        if (articleId) {
+            const response = await axios.get(`${BACKEND_ROOT_URL}/articles/${articleId}/comments`);
+
+            if (response.status == 200) {
+                return response.data
+            }
+        }
+    } catch (error) {
+        console.error('Failed to get Article comments:', error);
+    }
+}
+
+export const CommentOnArticle = async (articleId: string, data: any) => {
+    const token = localStorage.getItem('authToken');
+
+    if (!token) {
+        window.location.href = '/auth';
+        return;
+    }
+
+    try {
+        const response = await axios.post(`${BACKEND_ROOT_URL}/articles/${articleId}/comment`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.status == 200) {
+            return response.data
+        }
+    } catch (error) {
+        console.error('Failed to get Article comments:', error);
     }
 }

@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import { BACKEND_ROOT_URL } from './constants';
 import { Article, fetchArticles, upvoteArticle } from './api/api';
 
 interface NewsListProps {
@@ -16,12 +14,15 @@ interface NewsListProps {
 }
 
 const highlightText = (text: string, keyword: string) => {
-  if (!keyword) return text; // Return the text if no keyword is entered
-  const parts = text.split(new RegExp(`(${keyword})`, 'gi'));
+  if (!keyword) return text;
+
+  const rootKeyword = keyword.slice(0, 4);
+  const regex = new RegExp(`(${rootKeyword}\\w*)`, 'gi');
+
   return (
     <>
-      {parts.map((part, i) =>
-        part.toLowerCase() === keyword.toLowerCase() ? (
+      {text.split(regex).map((part, i) =>
+        part.toLowerCase().startsWith(rootKeyword.toLowerCase()) ? (
           <span key={i} className="bg-yellow-300">{part}</span>
         ) : (
           part
@@ -96,6 +97,10 @@ const NewsList: React.FC<NewsListProps> = ({
     }
   };
 
+  const handleCommentClick = (articleId: string) => {
+    window.location.href = `/${articleId}`;
+  };
+
   return (
     <div className="news-list mt-4">
       {error ? (
@@ -104,13 +109,12 @@ const NewsList: React.FC<NewsListProps> = ({
         <>
           {articles.map((article, index) => (
             <div key={article.id} className="news-item flex md:flex-row flex-col justify-between py-4 border-b border-gray-300">
-              <div className="flex items-center">
+              <div className="flex md:flex-row flex-col items-start md:items-center">
                 {/* Article Number */}
                 <span className="news-number text-gray-500 mr-2">
                   {(currentPage - 1) * 20 + index + 1}.
                 </span>
 
-                {/* Upvote Icon */}
                 {/* Upvote Icon */}
                 <span
                   className={`upvote-icon mx-2 cursor-pointer ${article.user_upvoted ? 'text-[#05846a]' : 'text-gray-400'} hover:text-[#05846a]`}
@@ -120,23 +124,38 @@ const NewsList: React.FC<NewsListProps> = ({
                 </span>
 
                 {/* Article Headline */}
-                <a
-                  href={article.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="news-link hover:underline"
-                >
-                  {highlightText(article.headline.split(' ').length > 50 ? `${article.headline.slice(0, 100)}...(click to read more)` : article.headline, query)}
-                </a>
+                <div className="flex flex-col">
+                  <a
+                    href={article.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="news-link hover:underline"
+                  >
+                    {highlightText(article.headline.split(' ').length > 50 ? `${article.headline.slice(0, 100)}...(click to read more)` : article.headline, query)}
+                  </a>
+                </div>
+
                 <div className="ml-2 text-sm text-gray-500">
-                  {article.upvote_count == 1 ? `1 upvote` : `${article.upvote_count} upvotes`}
+                  {!article.upvote_count
+                    ? '0 upvotes '
+                    : article.upvote_count === 1
+                      ? '1 upvote '
+                      : `${article.upvote_count} upvotes `}
+                </div>
+                <div>
+                  <button
+                    onClick={() => handleCommentClick(article.id)}
+                    className="text-blue-500 text-sm hover:underline"
+                  >
+                    comments
+                  </button>
                 </div>
               </div>
               <div className="text-right">
-                <span className="news-source text-gray-500">
+                <span className="news-source text-sm text-gray-500">
                   ({getDomainName(article.website)}) &nbsp;
                 </span>
-                <span className="news-time text-gray-500">
+                <span className="news-time text-sm text-gray-500">
                   {formatDistanceToNow(parseISO(article.created_at), { addSuffix: true }).replace('about ', '').replace('minutes', 'min')}
                 </span>
               </div>

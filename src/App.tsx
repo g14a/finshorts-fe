@@ -6,6 +6,7 @@ import './App.css';
 import AuthPage from './components/auth/AuthPage';
 import axios from 'axios';
 import { Article, fetchArticles, GetUserDetails } from './components/api/api';
+import { ArticleCommentsPage } from './components/comments/CommentTree';
 
 function App() {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -125,6 +126,8 @@ function App() {
             </div>
           } />
           <Route path="/auth" element={<AuthPage />} />
+
+          <Route path="/:articleId" element={<ArticleCommentsPage />} />
         </Routes>
       </div>
     </Router>

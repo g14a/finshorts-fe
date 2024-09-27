@@ -8,7 +8,7 @@
 
 .news-item {
   display: flex;
-  align-items: center;
+  flex-direction: column; /* Stack items vertically on mobile */
   justify-content: space-between;
   padding: 1rem 0;
   border-bottom: 1px solid #ccc;
@@ -17,7 +17,7 @@
 
 @media (min-width: 48rem) {
   .news-item {
-    flex-direction: row;
+    flex-direction: row; /* Align items horizontally on desktop */
     align-items: center;
     padding: 0.5rem 0;
   }
@@ -25,18 +25,17 @@
 
 /* Ensures the numbers and text stay in a row */
 .news-number {
-  margin-right: 1rem;
+  margin-right: 0.5rem;
   flex-shrink: 0;
   text-align: right;
   font-size: 1rem; /* Ensuring it's readable on mobile */
 }
 
 .news-link {
-  display: inline-block;
   font-size: 1.1rem;
   color: #333;
   text-decoration: none;
-  width: calc(100% - 4rem); /* Allow the link to take most of the width */
+  flex-grow: 1;
 }
 
 @media (min-width: 48rem) {
@@ -49,18 +48,50 @@
   text-decoration: underline;
 }
 
-.news-source {
+.upvote-icon {
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.news-details {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.news-meta {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 0.5rem;
   font-size: 0.875rem;
   color: #999;
+}
+
+.news-source {
   margin-left: 0.5rem;
-  flex-shrink: 0;
   text-align: right;
-  display: block;
+}
+
+.news-time {
+  margin-left: 0.5rem;
+}
+
+.news-actions {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 0.5rem;
 }
 
 @media (min-width: 48rem) {
-  .news-source {
-    padding-top: 0;
+  .news-meta {
+    margin-top: 0;
+  }
+
+  .news-actions {
+    margin-top: 0;
   }
 }
 
