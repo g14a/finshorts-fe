@@ -117,12 +117,12 @@ const NewsList: React.FC<NewsListProps> = ({
 
                 {/* Upvote Icon */}
                 <span
-                  className={`upvote-icon mx-2 cursor-pointer ${article.user_upvoted ? 'text-[#05846a]' : 'text-gray-400'} hover:text-[#05846a]`}
+                  className={`upvote-icon mr-2 cursor-pointer ${article.user_upvoted ? 'text-[#05846a]' : 'text-gray-400'} hover:text-[#05846a]`}
                   onClick={() => handleUpvote(article.id)}
                 >
                   ▲
                 </span>
-
+            
                 {/* Article Headline */}
                 <div className="flex flex-col">
                   <a
@@ -145,7 +145,7 @@ const NewsList: React.FC<NewsListProps> = ({
                 <div>
                   <button
                     onClick={() => handleCommentClick(article.id)}
-                    className="text-blue-500 text-sm hover:underline"
+                    className="text-blue-500 ml-2 text-sm hover:underline"
                   >
                     comments
                   </button>

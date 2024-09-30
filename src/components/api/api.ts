@@ -185,3 +185,27 @@ export const CommentOnArticle = async (articleId: string, data: any) => {
         console.error('Failed to get Article comments:', error);
     }
 }
+
+export const EditCommentOnArticle = async (articleId: string, commentId: string, data: any) => {
+    const token = localStorage.getItem('authToken');
+
+    if (!token) {
+        window.location.href = '/auth';
+        return;
+    }
+
+    try {
+        const response = await axios.put(`${BACKEND_ROOT_URL}/articles/${articleId}/comment/${commentId}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.status == 200) {
+            return response.data
+        }
+    } catch (error) {
+        console.error('Failed to get Article comments:', error);
+    }
+}
