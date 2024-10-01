@@ -31,6 +31,11 @@ export interface PaginatedResponse {
     pageSize: number;
 }
 
+export const getDomainName = (url: string) => {
+    const hostname = new URL(url).hostname;
+    return (hostname.startsWith('www.') ? hostname.slice(4) : hostname).split('.')[0];
+};
+
 export const login = async (payload: LoginPayload) => {
     const response = await axios.post(`${BACKEND_ROOT_URL}/users/login`, payload);
     return response.data;
@@ -41,7 +46,7 @@ export const signup = async (payload: SignupPayload) => {
     return response.data;
 };
 
-export const fetchArticles = async (
+export const FetchArticles = async (
     page: number,
     query: string,
     websiteFilter: string | null,
@@ -196,6 +201,54 @@ export const EditCommentOnArticle = async (articleId: string, commentId: string,
 
     try {
         const response = await axios.put(`${BACKEND_ROOT_URL}/articles/${articleId}/comment/${commentId}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.status == 200) {
+            return response.data
+        }
+    } catch (error) {
+        console.error('Failed to get Article comments:', error);
+    }
+}
+
+export const SaveArticle = async (articleId: string) => {
+    const token = localStorage.getItem('authToken');
+
+    if (!token) {
+        window.location.href = '/auth';
+        return;
+    }
+
+    try {
+        const response = await axios.post(`${BACKEND_ROOT_URL}/articles/${articleId}/save`, null, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.status == 200) {
+            return response.data
+        }
+    } catch (error) {
+        console.error('Failed to get Article comments:', error);
+    }
+}
+
+export const GetSavedArticles = async () => {
+    const token = localStorage.getItem('authToken');
+
+    if (!token) {
+        window.location.href = '/auth';
+        return;
+    }
+
+    try {
+        const response = await axios.get(`${BACKEND_ROOT_URL}/user/saved`, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json'

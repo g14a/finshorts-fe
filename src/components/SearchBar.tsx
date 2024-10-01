@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import debounce from 'lodash.debounce';
-import { Article, fetchArticles } from './api/api';
+import { Article, FetchArticles } from './api/api';
 
 interface SearchBarProps {
   onSearchResults: (articles: Article[], totalPages: number) => void;
@@ -36,7 +36,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   const handleSearch = async (searchQuery: string) => {
     setQuery(searchQuery); 
-    await fetchArticles(
+    await FetchArticles(
       1,
       searchQuery,
       null,

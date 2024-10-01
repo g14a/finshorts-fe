@@ -197,7 +197,7 @@ export const ArticleCommentsPage: React.FC = () => {
         }
     };
 
-    const handleRootCommentSubmit = async () => {
+    const handleCommentSubmit = async () => {
         const token = localStorage.getItem('authToken');
 
         if (!token) {
@@ -247,7 +247,7 @@ export const ArticleCommentsPage: React.FC = () => {
                 />
                 <button
                     className="bg-teal-700 text-white px-4 py-2 rounded mt-2"
-                    onClick={handleRootCommentSubmit}
+                    onClick={handleCommentSubmit}
                 >
                     Comment
                 </button>

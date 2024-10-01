@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import { Article, fetchArticles, upvoteArticle } from './api/api';
+import { Article, FetchArticles, getDomainName, SaveArticle, upvoteArticle } from './api/api';
 import './NewsList.css'
 
 interface NewsListProps {
@@ -47,13 +47,8 @@ const NewsList: React.FC<NewsListProps> = ({
   const [pageGroup, setPageGroup] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
 
-  const getDomainName = (url: string) => {
-    const hostname = new URL(url).hostname;
-    return (hostname.startsWith('www.') ? hostname.slice(4) : hostname).split('.')[0];
-  };
-
   useEffect(() => {
-    fetchArticles(
+    FetchArticles(
       currentPage,
       query,
       websiteFilter,
@@ -84,7 +79,7 @@ const NewsList: React.FC<NewsListProps> = ({
   const handleUpvote = async (articleId: string) => {
     try {
       await upvoteArticle(articleId);
-      fetchArticles(
+      FetchArticles(
         currentPage,
         query,
         websiteFilter,
@@ -100,6 +95,14 @@ const NewsList: React.FC<NewsListProps> = ({
 
   const handleCommentClick = (articleId: string) => {
     window.location.href = `/${articleId}`;
+  };
+
+  const handleSaveClick = async (articleId: string) => {
+      try {
+        await SaveArticle(articleId)
+      } catch (error) {
+        console.error('Failed to upvote article:', error);
+      }
   };
 
   return (
@@ -145,6 +148,14 @@ const NewsList: React.FC<NewsListProps> = ({
                         className="text-blue-500 ml-2 text-sm hover:underline"
                       >
                         comments
+                      </button>
+                    </div>
+                    <div>
+                      <button
+                        onClick={() => handleSaveClick(article.id)}
+                        className="text-blue-500 ml-2 text-sm hover:underline"
+                      >
+                        save
                       </button>
                     </div>
                   </div>

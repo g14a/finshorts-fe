@@ -4,9 +4,9 @@ import NewsList from './components/NewsList';
 import SearchBar from './components/SearchBar';
 import './App.css';
 import AuthPage from './components/auth/AuthPage';
-import axios from 'axios';
-import { Article, fetchArticles, GetUserDetails } from './components/api/api';
+import { Article, GetUserDetails } from './components/api/api';
 import { ArticleCommentsPage } from './components/comments/CommentTree';
+import ProfilePage from './components/profile/Profile';
 
 function App() {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -24,28 +24,8 @@ function App() {
     setLoading(false);
   };
 
-  const handleHomeClick = () => {
-    resetState();
-    fetchArticles(1, '', null, setArticles, setTotalPages, setLoading, setError);
-  };
-
-  const handleSearchError = (message: string) => {
-    setError(message);
-    setLoading(false);
-  };
-
   const handleDomainChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedDomain(event.target.value);
-  };
-
-  const resetState = () => {
-    setArticles([]);
-    setError(null);
-    setLoading(true);
-    setQuery('');
-    setTotalPages(0);
-    setCurrentPage(1);
-    setSelectedDomain('');
   };
 
   useEffect(() => {
@@ -72,7 +52,12 @@ function App() {
           <div className="flex items-center mt-4 sm:mt-0 sm:ml-auto sm:order-last">
             {username ? (
               <>
-                <div className="text-0.5xl font-bold">Logged in as {username}</div>
+                <Link
+                  to="/profile"
+                  className="text-0.5xl font-bold hover:underline"
+                >
+                  Logged in as {username}
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="ml-4 text-0.5xl font-bold hover:underline"
@@ -148,6 +133,7 @@ function App() {
           />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/:articleId" element={<ArticleCommentsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </div>
     </Router>
