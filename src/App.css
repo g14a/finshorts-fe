@@ -25,20 +25,11 @@
   background-color: #05846a;
   padding: 1rem;
   color: white;
-  text-align: left;
   text-align: center;
-  display: flex; /* Add display flex */
-  justify-content: space-between; /* Align children */
-  align-items: center; /* Vertically center children */
-}
-
-
-/* Responsive adjustments for larger screens */
-@media (min-width: 48rem) {
-  .App {
-    width: calc(100% - 30rem); /* Use this for tablets and desktops */
-    max-width: calc(100% - 30rem);
-  }
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  flex-wrap: wrap;
 }
 
 .top-bar {
@@ -48,17 +39,9 @@
   justify-content: flex-start;
 }
 
-@media (min-width: 48rem) {
-  .top-bar {
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-  }
-}
-
 h1 {
   margin: 0;
-  font-size: 1.2rem; /* Use rem instead of px */
+  font-size: 1.2rem; 
 }
 
 @media (min-width: 48rem) {
@@ -98,13 +81,6 @@ h1 {
   background-color: #ffffff; 
   color: #333; 
   transition: all 0.3s ease; 
-}
-
-@media (min-width: 48rem) {
-  .top-bar .domain-filter {
-    margin: 0.5rem;
-    padding: 0.5rem;
-  }
 }
 
 .top-bar .domain-filter:hover {

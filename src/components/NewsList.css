@@ -1,141 +1,146 @@
 /* Make the news list responsive */
 .news-list {
-  width: 100%;
-  padding: 1rem;
-  text-align: left;
-  box-sizing: border-box;
+    width: 100%;
+    padding: 0.2rem;
+    text-align: left;
+    box-sizing: border-box;
 }
 
 .news-item {
-  display: flex;
-  flex-direction: column; /* Stack items vertically on mobile */
-  justify-content: space-between;
-  padding: 1rem 0;
-  border-bottom: 1px solid #ccc;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid #ccc;
+    width: 100%;
 }
 
 @media (min-width: 48rem) {
-  .news-item {
-    flex-direction: row; /* Align items horizontally on desktop */
-    align-items: center;
-    padding: 0.5rem 0;
-  }
+    .news-item {
+        flex-direction: row;
+        align-items: center;
+        padding: 0.5rem 0;
+    }
 }
 
-/* Ensures the numbers and text stay in a row */
+/* Right-align the numbering and ensure it doesn't force a width */
 .news-number {
-  margin-right: 0.5rem;
-  flex-shrink: 0;
-  text-align: right;
-  font-size: 1rem; /* Ensuring it's readable on mobile */
+    text-align: right;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
 }
 
+/* Article link */
 .news-link {
-  font-size: 1.1rem;
-  color: #333;
-  text-decoration: none;
-  flex-grow: 1;
+    font-size: 1.1rem;
+    color: #333;
+    text-decoration: none;
+    flex-grow: 1;
 }
 
 @media (min-width: 48rem) {
-  .news-link {
-    font-size: 1rem;
-  }
+    .news-link {
+        font-size: 1rem;
+    }
 }
 
 .news-link:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 .upvote-icon {
-  margin-right: 0.5rem;
-  font-size: 1.2rem;
+    margin-left: 0.2rem;
+    margin-right: 0.5rem;
+    font-size: 1rem;
 }
 
+/* Flex container for headline and upvotes */
 .news-details {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
 }
 
 .news-meta {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  margin-top: 0.5rem;
-  font-size: 0.875rem;
-  color: #999;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #999;
 }
 
+/* Metadata like source and time */
 .news-source {
-  margin-left: 0.5rem;
-  text-align: right;
+    margin-left: 0.5rem;
+    text-align: right;
 }
 
 .news-time {
-  margin-left: 0.5rem;
+    margin-left: 0.5rem;
 }
 
+/* Actions like upvotes and comments */
 .news-actions {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-top: 0.5rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 0.5rem;
 }
 
 @media (min-width: 48rem) {
-  .news-meta {
-    margin-top: 0;
-  }
+    .news-meta {
+        margin-top: 0;
+    }
 
-  .news-actions {
-    margin-top: 0;
-  }
+    .news-actions {
+        margin-top: 0;
+    }
 }
 
 /* Pagination section fix */
 .pagination {
-  margin-top: 2rem;
-  text-align: center;
-  display: flex;
-  flex-wrap: wrap; /* Ensure the pagination wraps on small screens */
-  justify-content: center;
-  gap: 0.5rem; /* Adds spacing between buttons */
+    margin-top: 2rem;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
-.page-number, .page-nav {
-  cursor: pointer;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  background-color: #f1f1f1;
-  flex-shrink: 0; /* Ensures that buttons don’t collapse */
-  min-width: 3rem;
-  text-align: center;
+.page-number,
+.page-nav {
+    cursor: pointer;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background-color: #f1f1f1;
+    flex-shrink: 0;
+    min-width: 3rem;
+    text-align: center;
 }
 
 .page-number.active {
-  background-color: #05846a;
-  color: white;
-  border-color: #05846a;
+    background-color: #05846a;
+    color: white;
+    border-color: #05846a;
 }
 
 .page-number:hover {
-  background-color: #d3d3d3;
+    background-color: #d3d3d3;
 }
 
 .page-nav {
-  cursor: pointer;
-  margin: 0 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  background-color: #f1f1f1;
+    cursor: pointer;
+    margin: 0 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background-color: #f1f1f1;
 }
 
 .page-nav:hover {
-  background-color: #d3d3d3;
+    background-color: #d3d3d3;
 }

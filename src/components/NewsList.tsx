@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { Article, fetchArticles, upvoteArticle } from './api/api';
+import './NewsList.css'
 
 interface NewsListProps {
   onLoadingChange: (isLoading: boolean) => void;
@@ -82,7 +83,7 @@ const NewsList: React.FC<NewsListProps> = ({
 
   const handleUpvote = async (articleId: string) => {
     try {
-      await upvoteArticle(articleId)
+      await upvoteArticle(articleId);
       fetchArticles(
         currentPage,
         query,
@@ -102,53 +103,51 @@ const NewsList: React.FC<NewsListProps> = ({
   };
 
   return (
-    <div className="news-list mt-4">
+    <div className="news-list mt-2">
       {error ? (
         <div className="text-red-500">{error}</div>
       ) : (
         <>
           {articles.map((article, index) => (
-            <div key={article.id} className="news-item flex md:flex-row flex-col justify-between py-4 border-b border-gray-300">
-              <div className="flex md:flex-row flex-col items-start md:items-center">
-                {/* Article Number */}
-                <span className="news-number text-gray-500 mr-2">
-                  {(currentPage - 1) * 20 + index + 1}.
-                </span>
-
-                {/* Upvote Icon */}
-                <span
-                  className={`upvote-icon mr-2 cursor-pointer ${article.user_upvoted ? 'text-[#05846a]' : 'text-gray-400'} hover:text-[#05846a]`}
-                  onClick={() => handleUpvote(article.id)}
-                >
-                  ▲
-                </span>
-            
-                {/* Article Headline */}
-                <div className="flex flex-col">
-                  <a
-                    href={article.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="news-link hover:underline"
-                  >
-                    {highlightText(article.headline.split(' ').length > 50 ? `${article.headline.slice(0, 100)}...(click to read more)` : article.headline, query)}
-                  </a>
-                </div>
-
-                <div className="ml-2 text-sm text-gray-500">
-                  {!article.upvote_count
-                    ? '0 upvotes '
-                    : article.upvote_count === 1
-                      ? '1 upvote '
-                      : `${article.upvote_count} upvotes `}
-                </div>
-                <div>
-                  <button
-                    onClick={() => handleCommentClick(article.id)}
-                    className="text-blue-500 ml-2 text-sm hover:underline"
-                  >
-                    comments
-                  </button>
+            <div key={article.id} className="news-item flex md:flex-row flex-col justify-between border-gray-300">
+              <div className="flex flex-col md:flex-row md:items-center">
+                <div className="flex flex-col flex-grow">
+                  <div className='flex items-center'>
+                    <div className='news-number'>
+                      {(currentPage - 1) * 20 + index + 1}.
+                    </div>
+                    <div
+                      className={`upvote-icon cursor-pointer ${article.user_upvoted ? 'text-[#05846a]' : 'text-gray-400'} hover:text-[#05846a]`}
+                      onClick={() => handleUpvote(article.id)}
+                    >
+                      ▲
+                    </div>
+                    <a
+                      href={article.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="news-link hover:underline"
+                    >
+                      {highlightText(article.headline.split(' ').length > 50 ? `${article.headline.slice(0, 100)}...(click to read more)` : article.headline, query)}
+                    </a>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="text-sm ml-10 text-gray-500">
+                      {!article.upvote_count
+                        ? '0 upvotes '
+                        : article.upvote_count === 1
+                          ? '1 upvote '
+                          : `${article.upvote_count} upvotes `}
+                    </div>
+                    <div>
+                      <button
+                        onClick={() => handleCommentClick(article.id)}
+                        className="text-blue-500 ml-2 text-sm hover:underline"
+                      >
+                        comments
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="text-right">
@@ -170,7 +169,7 @@ const NewsList: React.FC<NewsListProps> = ({
             {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
               <span
                 key={page}
-                className={`page-number cursor-pointer py-1 px-3 border rounded ${page === currentPage ? 'bg-teal-700 text-white' : 'bg-gray-200'}`}
+                className={`page-number cursor-pointer px-3 border rounded ${page === currentPage ? 'bg-teal-600' : 'bg-gray-200'}`}
                 onClick={() => handlePageClick(page)}
               >
                 {page}

@@ -64,7 +64,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <header className="App-header bg-teal-700 text-white p-4 text-center flex flex-col sm:flex-row justify-between items-center">
+        <header className="App-header bg-teal-700 text-white p-4 text-center flex flex-col sm:flex-row justify-between">
           <Link to="/" className="header-link">
             <h1 className="text-2xl font-bold">BizBrief</h1>
             <h2 className="text-sm font-bold">Your business news aggregator buddy</h2>
