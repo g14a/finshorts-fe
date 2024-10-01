@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Article, CommentOnArticle, GetArticleById, GetArticleComments, EditCommentOnArticle } from '../api/api';
 import { formatDistanceToNow, parseISO } from 'date-fns';
+import { FaExternalLinkAlt } from "react-icons/fa";
 
 interface Comment {
     id: string;
@@ -16,16 +17,16 @@ interface Comment {
 
 interface CommentTreeProps {
     comments: Comment[];
-    onReplySubmit: () => void; 
+    onReplySubmit: () => void;
 }
 
 export const CommentTree: React.FC<CommentTreeProps> = ({ comments, onReplySubmit }) => {
-    const { articleId } = useParams<{ articleId: string }>(); 
+    const { articleId } = useParams<{ articleId: string }>();
     const [replyContent, setReplyContent] = useState<{ [key: string]: string }>({});
     const [replyingTo, setReplyingTo] = useState<string | null>(null);
 
-    const [editingComment, setEditingComment] = useState<string | null>(null); 
-    const [editContent, setEditContent] = useState<{ [key: string]: string }>({}); 
+    const [editingComment, setEditingComment] = useState<string | null>(null);
+    const [editContent, setEditContent] = useState<{ [key: string]: string }>({});
 
     const handleReplyClick = (commentId: string) => {
         const token = localStorage.getItem('authToken');
@@ -36,7 +37,7 @@ export const CommentTree: React.FC<CommentTreeProps> = ({ comments, onReplySubmi
         }
 
         setReplyingTo(commentId);
-        setEditingComment(null);  
+        setEditingComment(null);
     };
 
     const handleReplyChange = (commentId: string, content: string) => {
@@ -51,7 +52,7 @@ export const CommentTree: React.FC<CommentTreeProps> = ({ comments, onReplySubmi
                     parent_comment_id: commentId
                 };
 
-                await CommentOnArticle(articleId!, data); 
+                await CommentOnArticle(articleId!, data);
 
                 setReplyContent((prev) => ({ ...prev, [commentId]: '' }));
                 setReplyingTo(null);
@@ -63,7 +64,6 @@ export const CommentTree: React.FC<CommentTreeProps> = ({ comments, onReplySubmi
         }
     };
 
-    // Handle the edit button click, and close any active reply input box
     const handleEditClick = (commentId: string, content: string) => {
         const token = localStorage.getItem('authToken');
 
@@ -72,17 +72,15 @@ export const CommentTree: React.FC<CommentTreeProps> = ({ comments, onReplySubmi
             return;
         }
 
-        setEditingComment(commentId);  // Set the edit box to the current comment
-        setEditContent({ [commentId]: content }); // Set initial content in the edit box
-        setReplyingTo(null);           // Close the reply box if it's open
+        setEditingComment(commentId);
+        setEditContent({ [commentId]: content });
+        setReplyingTo(null);
     };
 
-    // Handle the change in edit content
     const handleEditChange = (commentId: string, content: string) => {
         setEditContent((prev) => ({ ...prev, [commentId]: content }));
     };
 
-    // Submit the edited comment
     const handleEditSubmit = async (commentId: string) => {
         try {
             if (editContent[commentId]) {
@@ -107,21 +105,21 @@ export const CommentTree: React.FC<CommentTreeProps> = ({ comments, onReplySubmi
                 <div className="comment-content">
                     <p>{comment.content}</p>
                     <span className="text-xs text-gray-500">{`${comment.username} ${formatDistanceToNow(parseISO(comment.created_at), { addSuffix: true }).replace('about ', '').replace('minute', 'min')}`}</span>
-                    
+
                     <button
                         className="text-sm text-teal-600 ml-2 hover:underline"
                         onClick={() => handleReplyClick(comment.id)}
                     >
                         Reply
                     </button>
-                    
+
                     <button
                         className="text-sm text-teal-600 ml-2 hover:underline"
                         onClick={() => handleEditClick(comment.id, comment.content)}
                     >
                         Edit
                     </button>
-                    
+
                     {replyingTo === comment.id && (
                         <div className="mt-2">
                             <textarea
@@ -138,7 +136,7 @@ export const CommentTree: React.FC<CommentTreeProps> = ({ comments, onReplySubmi
                             </button>
                         </div>
                     )}
-                    
+
                     {editingComment === comment.id && (
                         <div className="mt-2">
                             <textarea
@@ -209,8 +207,8 @@ export const ArticleCommentsPage: React.FC = () => {
 
         try {
             await CommentOnArticle(articleId!, { content: rootCommentContent });
-            setRootCommentContent(''); // Clear the input field after submission
-            fetchCommentsData(); // Refresh the comments list
+            setRootCommentContent('');
+            fetchCommentsData();
         } catch (error) {
             console.error('Failed to submit comment:', error);
         }
@@ -222,7 +220,7 @@ export const ArticleCommentsPage: React.FC = () => {
     }, [articleId]);
 
     return (
-        <div className="article-comments-page">
+        <div className="article-comments-page p-3">
             {article && (
                 <div className="article-header">
                     <h1 className="text-2xl mt-5">{article.headline}</h1>
@@ -232,8 +230,12 @@ export const ArticleCommentsPage: React.FC = () => {
                         rel="noopener noreferrer"
                         className="news-link hover:underline text-blue-500"
                     >
-                        {article.link}
+                        <span>
+                            {`${article.link.slice(0, 80)}...`}
+                            <FaExternalLinkAlt className="inline-block" style={{ marginBottom: '0.3rem', fontSize: '0.9rem' }} />
+                        </span>
                     </a>
+
                 </div>
             )}
             <div className="root-comment-box mt-4">
