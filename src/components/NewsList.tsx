@@ -203,6 +203,9 @@ const NewsList: React.FC<NewsListProps> = ({
           </div>
         </>
       )}
+      <footer className="text-black text-center p-4">
+        News refreshed every 10 minutes
+      </footer>
     </div>
   );
 };
