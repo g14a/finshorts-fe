@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { getDomainName, GetSavedArticles, upvoteArticle } from '../api/api';
+import { getDomainName, GetSavedArticles, upvoteArticle } from '../api/apiUtils';
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import { Article } from '../api/api';
+import { Article } from '../api/apiUtils';
 
 interface SavedArticle {
     article_id: string;

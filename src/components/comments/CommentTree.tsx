@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Article, CommentOnArticle, GetArticleById, GetArticleComments, EditCommentOnArticle } from '../api/api';
+import { Article, CommentOnArticle, GetArticleById, GetArticleComments, EditCommentOnArticle, linkifyText } from '../api/apiUtils';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { FaExternalLinkAlt } from "react-icons/fa";
 
@@ -103,7 +103,7 @@ export const CommentTree: React.FC<CommentTreeProps> = ({ comments, onReplySubmi
         return comments.map((comment) => (
             <div key={comment.id} className="comment-item ml-4 mt-4">
                 <div className="comment-content">
-                    <p>{comment.content}</p>
+                    <p>{linkifyText(comment.content)}</p>
                     <span className="text-xs text-gray-500">{`${comment.username} ${formatDistanceToNow(parseISO(comment.created_at), { addSuffix: true }).replace('about ', '').replace('minute', 'min')}`}</span>
 
                     <button

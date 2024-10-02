@@ -20,7 +20,8 @@ export interface Article {
     website: string;
     created_at: string;
     upvote_count: number;
-    user_upvoted: boolean
+    user_upvoted: boolean;
+    user_saved: boolean
 }
 
 export interface PaginatedResponse {
@@ -34,6 +35,44 @@ export interface PaginatedResponse {
 export const getDomainName = (url: string) => {
     const hostname = new URL(url).hostname;
     return (hostname.startsWith('www.') ? hostname.slice(4) : hostname).split('.')[0];
+};
+
+export const linkifyText = (text: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)|(www\.[^\s]+)|([a-zA-Z0-9][a-zA-Z0-9-]*\.[a-zA-Z]{2,}\b(?:\/[^\s]*)?)/g;
+    const parts = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = urlRegex.exec(text)) !== null) {
+        if (match.index > lastIndex) {
+            parts.push(text.slice(lastIndex, match.index));
+        }
+
+        const url = match[0];
+        const href = url.startsWith('http') ? url : 
+                    url.startsWith('www.') ? `https://${url}` : 
+                    `https://${url}`;
+        
+        parts.push(
+            <a
+                key={match.index}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline"
+            >
+                {url}
+            </a>
+        );
+
+        lastIndex = match.index + url.length;
+    }
+
+    if (lastIndex < text.length) {
+        parts.push(text.slice(lastIndex));
+    }
+
+    return parts;
 };
 
 export const login = async (payload: LoginPayload) => {
@@ -222,7 +261,7 @@ export const SaveArticle = async (articleId: string) => {
         window.location.href = '/auth';
         return;
     }
-
+    
     try {
         const response = await axios.post(`${BACKEND_ROOT_URL}/articles/${articleId}/save`, null, {
             headers: {

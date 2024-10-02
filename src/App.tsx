@@ -4,7 +4,7 @@ import NewsList from './components/NewsList';
 import SearchBar from './components/SearchBar';
 import './App.css';
 import AuthPage from './components/auth/AuthPage';
-import { Article, GetUserDetails } from './components/api/api';
+import { Article, GetUserDetails } from './components/api/apiUtils';
 import { ArticleCommentsPage } from './components/comments/CommentTree';
 import ProfilePage from './components/profile/Profile';
 

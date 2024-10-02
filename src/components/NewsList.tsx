@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import { Article, FetchArticles, getDomainName, SaveArticle, upvoteArticle } from './api/api';
+import { Article, FetchArticles, getDomainName, SaveArticle, upvoteArticle } from './api/apiUtils';
 import './NewsList.css'
 
 interface NewsListProps {
@@ -98,11 +98,20 @@ const NewsList: React.FC<NewsListProps> = ({
   };
 
   const handleSaveClick = async (articleId: string) => {
-      try {
-        await SaveArticle(articleId)
-      } catch (error) {
-        console.error('Failed to upvote article:', error);
-      }
+    try {
+      await SaveArticle(articleId);
+      FetchArticles(
+        currentPage,
+        query,
+        websiteFilter,
+        setArticles,
+        setTotalPages,
+        onLoadingChange,
+        setError
+      );
+    } catch (error) {
+      console.error('Failed to upvote article:', error);
+    }
   };
 
   return (
@@ -152,10 +161,10 @@ const NewsList: React.FC<NewsListProps> = ({
                     </div>
                     <div>
                       <button
-                        onClick={() => handleSaveClick(article.id)}
-                        className="text-blue-500 ml-2 text-sm hover:underline"
+                        onClick={!article.user_saved ? () => handleSaveClick(article.id) : undefined}
+                        className={`ml-2 text-sm ${!article.user_saved ? 'hover:underline text-blue-500' : 'text-[#05846a]'}`}
                       >
-                        save
+                        {article.user_saved ? 'saved!' : 'save'}
                       </button>
                     </div>
                   </div>
