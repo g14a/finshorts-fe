@@ -143,8 +143,8 @@ const NewsList: React.FC<NewsListProps> = ({
                       {highlightText(article.headline.split(' ').length > 50 ? `${article.headline.slice(0, 100)}...(click to read more)` : article.headline, query)}
                     </a>
                   </div>
-                  <div className="flex items-center">
-                    <div className="text-sm ml-10 text-gray-500">
+                  <div className="mt-1 flex items-center">
+                    <div className="text-sm ml-10 pt-0.5 text-gray-500">
                       {!article.upvote_count
                         ? '0 upvotes '
                         : article.upvote_count === 1
