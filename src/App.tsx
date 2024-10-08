@@ -103,6 +103,7 @@ function App() {
                         <option value="investopedia">Investopedia</option>
                         <option value="economictimes">Economic Times</option>
                         <option value="timesofindia">Times of India</option>
+                        <option value="thehindu">The Hindu</option>
                         <option value="outlookbusiness">Outlook Business</option>
                         <option value="financialexpress">Financial Express</option>
                         <option value="deccanherald">Deccan Herald</option>
