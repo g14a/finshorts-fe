@@ -42,5 +42,31 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
 
-      - name: Log out from GitHub Container Registry
-        run: docker logout ghcr.io
+      - name: Install SSH client
+        run: sudo apt-get install -y openssh-client
+  
+      - name: Add SSH key
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+  
+      - name: Copy docker-compose.yml to remote server
+        run: |
+          scp -o StrictHostKeyChecking=no docker-compose.yml root@172.232.97.137:~/docker-compose.yml
+  
+      - name: Log in to GitHub Container Registry on Remote Server
+        run: |
+            ssh -o StrictHostKeyChecking=no root@172.232.97.137 "
+            echo '${{ secrets.GH_TOKEN }}' | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            "
+  
+      - name: Deploy with Docker Compose
+        run: |
+            ssh -o StrictHostKeyChecking=no root@172.232.97.137 "
+            docker compose pull fe-server &&
+            docker compose up -d fe-server
+            "
+  
+      - name: Log out from GHCR on Remote Server
+        run: |
+            ssh -o StrictHostKeyChecking=no root@172.232.97.137 "docker logout ghcr.io"
